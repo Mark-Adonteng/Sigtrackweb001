@@ -8,21 +8,23 @@ import MainLayout from './layout/mainLayout/MainLayout';
 import MainLayoutContent from './layout/mainLayout/MainLayoutContent';
 import { RightLayoutProvider } from './layout/rightLayout/RightLayoutContext';
 
-
 const App: React.FC = () => {
   return (
-    <div className='flex'>
-      <LeftLayout />
-      <MainLayout>
+    <div className='flex flex-col h-screen'>
+      {/* Left Layout */}
+      <LeftLayout className='md:w-1/4 md:h-full' />
+
+      {/* Main Layout */}
+      <MainLayout className='md:w-1/2 md:h-full'>
         <MainLayoutContent />
       </MainLayout>
-      
+
+      {/* Right Layout */}
       <RightLayoutProvider>
-      <RightLayout >
-        <RightLayoutContent />
-      </RightLayout>
+        <RightLayout className='md:w-1/4 md:h-full'>
+          <RightLayoutContent />
+        </RightLayout>
       </RightLayoutProvider>
-     
     </div>
   );
 };

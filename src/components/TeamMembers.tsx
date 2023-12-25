@@ -1,13 +1,16 @@
-// TeamMembers.tsx
 import React from 'react';
-import getTeamMembers from './GetMmebers'
+import PropTypes from 'prop-types';
 
-const TeamMembers: React.FC<{ teamName: string }> = ({ teamName }) => {
-  const teamMembers = getTeamMembers(teamName);
+interface TeamMembersDisplayProps {
+  teamName: string;
+}
+
+const TeamMembersDisplay: React.FC<TeamMembersDisplayProps> = ({ teamName }) => {
+  const teamMembers = getMockTeamMembers(teamName);
 
   return (
     <div>
-      <h2>{teamName} Members</h2>
+      <h2>Team Members for {teamName}</h2>
       <ul>
         {teamMembers.map((member: { id: number; name: string }) => (
           <li key={member.id}>{member.name}</li>
@@ -17,4 +20,27 @@ const TeamMembers: React.FC<{ teamName: string }> = ({ teamName }) => {
   );
 };
 
-export default TeamMembers;
+TeamMembersDisplay.propTypes = {
+  teamName: PropTypes.string.isRequired,
+};
+
+const getMockTeamMembers = (teamName: string) => {
+  const mockData: { [key: string]: { id: number; name: string }[] } = {
+    'Team A': [
+      { id: 1, name: 'John Doe' },
+      { id: 2, name: 'Jane Smith' },
+      // ... add more members for Team A
+    ],
+    'Team B': [
+      { id: 3, name: 'Alice Johnson' },
+      { id: 4, name: 'Bob Brown' },
+      // ... add more members for Team B
+    ],
+    // Add more teams and members as needed
+  };
+
+  // Return team members based on the selected teamName
+  return mockData[teamName] || [];
+};
+
+export default TeamMembersDisplay;

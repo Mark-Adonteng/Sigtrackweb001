@@ -5,9 +5,15 @@ import SecondSection from './SecondSection'
 import SecondSectionContent from './SecondSectionContent'
 
 
-const LeftLayout = () => {
+interface LeftLayoutProps {
+  className?: string;
+}
+
+
+const LeftLayout: React.FC<LeftLayoutProps> = ({ className}) => {
   return (
-    <div className="flex flex-row">
+    <div  className={`left-layout flex flex-row ${className}`}>
+     
         <FirstSection>
             <FirstSectionContent/>
         </FirstSection>

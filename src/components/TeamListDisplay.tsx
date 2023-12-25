@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 const TeamListDisplay = ({ teamSectionTitles }) => {
   console.log(teamSectionTitles);
   return (
-    <div className=' font-semibold text-primary-text mb-4'>
+    <div className='font-semibold text-primary-text mb-4'>
      
 
      <div className='mt-10 mr-32 mb-4'>
@@ -50,5 +50,4 @@ TeamListDisplay.propTypes = {
 };
 
 export default TeamListDisplay;
-
 

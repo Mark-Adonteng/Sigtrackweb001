@@ -27,3 +27,7 @@ const TeamsSection: React.FC<TeamSectionProps> = (teamSectionProps: TeamSectionP
 };
 
 export default TeamsSection;
+
+
+
+
