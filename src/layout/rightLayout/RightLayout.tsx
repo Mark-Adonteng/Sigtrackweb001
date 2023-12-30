@@ -10,14 +10,19 @@ interface RightLayoutProps {
   className?: string;
 }
 
-const RightLayout: React.FC<RightLayoutProps> = ({ children, className }) => {
+const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
   const [rotation, setRotation] = useState(0);
   const [isNarrowed, setIsNarrowed] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 
   const handleButtonClick = () => {
     const newRotation = rotation === 0 ? 180 : 0;
     setRotation(newRotation);
     setIsNarrowed(!isNarrowed);
+  };
+
+  const handleTeamItemClick = (teamName: string) => {
+    setSelectedTeam(teamName);
   };
 
   return (
@@ -45,7 +50,10 @@ const RightLayout: React.FC<RightLayoutProps> = ({ children, className }) => {
       {isNarrowed && (
         <IsRightLayoutNarrowedContext.Provider value={isNarrowed}>
           <div className="ml-36 space-y-4">
-            <TeamListDisplay teamSectionTitles={{ team: '', suspendedTeam: '' }} />
+            <TeamListDisplay
+              teamSectionTitles={{ team: '', suspendedTeam: '' }}
+             
+            />
           </div>
         </IsRightLayoutNarrowedContext.Provider>
       )}

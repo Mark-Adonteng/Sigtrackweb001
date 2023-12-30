@@ -30,26 +30,31 @@ const SecondSection: React.FC<SecondSectionProps> = ({ children }) => {
     transition: 'transform 0.5s ease-in-out', // Keep the transition duration the same as the wrapper
   };
 
- 
-
   return (
-    <div className="second-section z-20 ml-40 mt-[-0.5rem] absolute 
-      flex justify-center h-full items-center w-80 bottom-0 mr-auto bg-custom-bg"
+    <div
+      className="second-section z-20 ml-40 mt-[-0.5rem] absolute flex justify-center h-full items-center w-80 bottom-0 mr-auto bg-custom-bg
+      {{ isNarrowed1 ? 'w-2rem' : 'w-300' }} transition-width duration-100 ease-in-out"
       style={wrapperStyles}
     >
       <div className="content-wrapper">
         <button
-          className={`arrow-button1 ${rotation === 180 ? 'rotate' : ''} arrow-button ml-48 text-4xl 
-          transform transition-transform duration-100 ease-in-out absolute border-none shadow-none bg-transparent`}
+          className={`arrow-button1 ${rotation === 180 ? 'rotate' : ''} arrow-button ml-48 text-4xl transform transition-transform duration-100 ease-in-out absolute border-none shadow-none bg-transparent`}
           onClick={handleButtonClick}
           style={buttonStyles}
         >
           {'<'}
         </button>
       </div>
-      <div className="content-here" >
-        {children}
-      </div>
+
+      {isNarrowed1 ? (
+        <div className="ml-36 space-y-4">
+          
+        </div>
+      ) : (
+        <div style={{ position: 'absolute' }}>
+          {children}
+        </div>
+      )}
     </div>
   );
 };
