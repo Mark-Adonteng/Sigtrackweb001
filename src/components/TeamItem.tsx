@@ -8,7 +8,7 @@ export type TeamItemModel = {
   icon: string;
   duration: string;
   backgroundColor: string;
-  members?: string[]; // Add members property as an array of strings
+
 };
 
 const TeamItem: React.FC<TeamItemModel> = (teamItemProps: TeamItemModel) => {
@@ -33,16 +33,7 @@ const TeamItem: React.FC<TeamItemModel> = (teamItemProps: TeamItemModel) => {
           </div>
         )}
 
-        {teamItemProps.members && (
-          <div>
-            <h4>Members:</h4>
-            <ul>
-              {teamItemProps.members.map((member, index) => (
-                <li key={index}>{member}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+      
       </div>
     </div>
   );
