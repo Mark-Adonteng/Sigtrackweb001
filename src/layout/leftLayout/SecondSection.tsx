@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useEffect } from 'react';
 import { useTeamContext } from '../../components/TeamContext';
 
 interface SecondSectionProps {
@@ -7,12 +7,16 @@ interface SecondSectionProps {
 
 const SecondSection: React.FC<SecondSectionProps> = ({ children }) => {
   const { isNarrowed1, toggleIsNarrowed1 } = useTeamContext();
-
   const [rotation, setRotation] = useState(0);
 
-  const handleButtonClick = () => {
-    const newRotation = rotation === 0 ? 180 : 0;
+  useEffect(() => {
+    // Update the rotation based on the isNarrowed1 state
+    const newRotation = isNarrowed1 ? 180 : 0;
     setRotation(newRotation);
+  }, [isNarrowed1]);
+
+  const handleButtonClick = () => {
+    // Toggle the isNarrowed1 state
     toggleIsNarrowed1();
   };
 
