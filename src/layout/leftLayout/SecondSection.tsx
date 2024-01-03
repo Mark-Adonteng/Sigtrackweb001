@@ -1,39 +1,37 @@
-import { useState, ReactNode } from 'react';
+import React, { useState, ReactNode } from 'react';
+import { useTeamContext } from '../../components/TeamContext';
 
 interface SecondSectionProps {
   children: ReactNode;
 }
 
 const SecondSection: React.FC<SecondSectionProps> = ({ children }) => {
+  const { isNarrowed1, toggleIsNarrowed1 } = useTeamContext();
+
   const [rotation, setRotation] = useState(0);
-  const [isNarrowed1, setIsNarrowed1] = useState(false);
 
   const handleButtonClick = () => {
-    // Toggle between 0 and 180 degrees
     const newRotation = rotation === 0 ? 180 : 0;
     setRotation(newRotation);
-
-    // Toggle between narrowed and expanded states
-    setIsNarrowed1(!isNarrowed1);
+    toggleIsNarrowed1();
   };
 
   const wrapperStyles = {
     width: isNarrowed1 ? '2rem' : '300px',
-    transition: 'width 0.1s ease-in-out', // Adjusted transition duration
+    transition: 'width 0.1s ease-in-out',
   };
 
-  const buttonStyles = {
+  const buttonStyles: React.CSSProperties = {
     position: 'absolute',
     right: '0.5rem',
     top: isNarrowed1 ? '0rem' : '0rem',
     transform: `rotate(${rotation}deg)`,
-    transition: 'transform 0.5s ease-in-out', // Keep the transition duration the same as the wrapper
+    transition: 'transform 0.5s ease-in-out',
   };
 
   return (
     <div
-      className="second-section z-20 ml-40 mt-[-0.5rem] absolute flex justify-center h-full items-center w-80 bottom-0 mr-auto bg-custom-bg
-      {{ isNarrowed1 ? 'w-2rem' : 'w-300' }} transition-width duration-100 ease-in-out"
+      className="second-section z-20 ml-40 mt-[-0.5rem] absolute flex justify-center h-full items-center w-80 bottom-0 mr-auto bg-custom-bg"
       style={wrapperStyles}
     >
       <div className="content-wrapper">
@@ -48,7 +46,7 @@ const SecondSection: React.FC<SecondSectionProps> = ({ children }) => {
 
       {isNarrowed1 ? (
         <div className="ml-36 space-y-4">
-          
+          {/* Content when narrowed */}
         </div>
       ) : (
         <div style={{ position: 'absolute' }}>

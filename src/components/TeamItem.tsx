@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { IsRightLayoutNarrowedContext } from '../layout/rightLayout/RightLayout';
 import { useContext } from 'react';
@@ -8,14 +7,21 @@ export type TeamItemModel = {
   icon: string;
   duration: string;
   backgroundColor: string;
-
+  onClick?: () => void; // Make onClick optional
 };
 
 const TeamItem: React.FC<TeamItemModel> = (teamItemProps: TeamItemModel) => {
   const rightLayoutNarrow = useContext(IsRightLayoutNarrowedContext);
 
+  const handleClick = () => {
+    if (teamItemProps.onClick) {
+      teamItemProps.onClick();
+      
+    }
+  };
+
   return (
-    <div className="flex flex-col -mt-70">
+    <div className="flex flex-col -mt-70 cursor-pointer" onClick={handleClick}>
       <div className="flex items-center mb-2">
         <div
           className={`text-white rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center`}
@@ -32,15 +38,9 @@ const TeamItem: React.FC<TeamItemModel> = (teamItemProps: TeamItemModel) => {
             </div>
           </div>
         )}
-
-      
       </div>
     </div>
   );
 };
 
 export default TeamItem;
-
-
-
-

@@ -1,52 +1,69 @@
-// TeamContext.tsx
-import { createContext, useReducer, useContext, ReactNode } from 'react';
+// import React, { createContext, useContext, ReactNode, useState } from 'react';
 
-interface TeamState {
-  icon: string;
-  backgroundColor: string;
-}
+// interface TeamContextProps {
+//   isNarrowed1: boolean;
+//   toggleIsNarrowed1: () => void;
+// }
 
-type TeamAction =
-  | { type: 'SET_ICON'; payload: string }
-  | { type: 'SET_BACKGROUND_COLOR'; payload: string };
+// const TeamContext = createContext<TeamContextProps | undefined>(undefined);
+
+// export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+//   const [isNarrowed1, setIsNarrowed1] = useState(false);
+
+//   const toggleIsNarrowed1 = () => {
+//     setIsNarrowed1((prevIsNarrowed) => !prevIsNarrowed);
+//   };
+
+//   return (
+//     <TeamContext.Provider value={{ isNarrowed1, toggleIsNarrowed1 }}>
+//       {children}
+//     </TeamContext.Provider>
+//   );
+// };
+
+// export const useTeamContext = () => {
+//   const context = useContext(TeamContext);
+//   if (!context) {
+//     throw new Error('useTeamContext must be used within a TeamProvider');
+//   }
+//   return context;
+// };
+
+
+
+
+import React, { createContext, useContext, ReactNode, useState } from 'react';
 
 interface TeamContextProps {
-  state: TeamState;
-  dispatch: React.Dispatch<TeamAction>;
+  isNarrowed1: boolean;
+  toggleIsNarrowed1: () => void;
 }
 
 const TeamContext = createContext<TeamContextProps | undefined>(undefined);
 
-const teamReducer = (state: TeamState, action: TeamAction): TeamState => {
-  switch (action.type) {
-    case 'SET_ICON':
-      return { ...state, icon: action.payload };
-    case 'SET_BACKGROUND_COLOR':
-      return { ...state, backgroundColor: action.payload };
-    default:
-      return state;
-  }
-};
+export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [isNarrowed1, setIsNarrowed1] = useState(false);
 
-const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(teamReducer, {
-    icon: '',
-    backgroundColor: '',
-  });
+  const toggleIsNarrowed1 = () => {
+    setIsNarrowed1((prevIsNarrowed) => !prevIsNarrowed);
+  };
 
   return (
-    <TeamContext.Provider value={{ state, dispatch }}>
+    <TeamContext.Provider value={{ isNarrowed1, toggleIsNarrowed1 }}>
       {children}
     </TeamContext.Provider>
   );
 };
 
-const useTeam = () => {
+export const useTeamContext = () => {
   const context = useContext(TeamContext);
   if (!context) {
-    throw new Error('useTeam must be used within a TeamProvider');
+    throw new Error('useTeamContext must be used within a TeamProvider');
   }
-  return context;
-};
 
-export { TeamProvider, useTeam };
+  const toggleSecondSection = () => {
+    context.toggleIsNarrowed1();
+  };
+
+  return { ...context, toggleSecondSection };
+};
