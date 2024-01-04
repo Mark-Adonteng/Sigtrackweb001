@@ -39,6 +39,10 @@ interface TeamContextProps {
   toggleIsNarrowed1: () => void;
 }
 
+interface TeamContextProps {
+  isNarrowed1: boolean;
+  toggleIsNarrowed1: () => void;
+}
 const TeamContext = createContext<TeamContextProps | undefined>(undefined);
 
 export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -55,15 +59,11 @@ export const TeamProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-export const useTeamContext = () => {
+export const useTeamContext = (): TeamContextProps => {
   const context = useContext(TeamContext);
   if (!context) {
     throw new Error('useTeamContext must be used within a TeamProvider');
   }
 
-  const toggleSecondSection = () => {
-    context.toggleIsNarrowed1();
-  };
-
-  return { ...context, toggleSecondSection };
+  return context;
 };
