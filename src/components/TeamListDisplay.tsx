@@ -1,3 +1,4 @@
+// TeamListDisplay.tsx
 import React from 'react';
 import TeamsSection from './TeamsSection';
 import PropTypes from 'prop-types';
@@ -10,10 +11,11 @@ const TeamListDisplay: React.FC<{ teamSectionTitles: { team: string; suspendedTe
         <TeamsSection
           title={teamSectionTitles.team}
           teamItemList={[
-            { teamItemName: "Team A", icon: "A", duration: "2023-2024", backgroundColor: "#ff0000"},
-            { teamItemName: "Team B", icon: "B", duration: "2023-2024", backgroundColor: "violet"},
-            { teamItemName: "Team C", icon: "C", duration: "2023-2024", backgroundColor: "green"},
-            { teamItemName: "Team D", icon: "D", duration: "2023-2024", backgroundColor: "brown" },
+            { id: 1, teamItemName: "Team A", icon: "A", duration: "2023-2024", backgroundColor: "#ff0000"},
+            { id: 2, teamItemName: "Team B", icon: "B", duration: "2023-2024", backgroundColor: "violet"},
+            { id: 3, teamItemName: "Team C", icon: "C", duration: "2023-2024", backgroundColor: "green"},
+            { id: 4, teamItemName: "Team D", icon: "D", duration: "2023-2024", backgroundColor: "brown" },
+            // ... (repeat for other items)
           ]}
         />
        
@@ -21,10 +23,11 @@ const TeamListDisplay: React.FC<{ teamSectionTitles: { team: string; suspendedTe
         <TeamsSection
           title={teamSectionTitles.suspendedTeam}
           teamItemList={[
-            { teamItemName: "Team E", icon: "E", duration: "2023-2024", backgroundColor: "blue",},
-            { teamItemName: "Team F", icon: "F", duration: "2023-2024", backgroundColor: "gold"},
-            { teamItemName: "Team G", icon: "G", duration: "2023-2024", backgroundColor: "indigo"},
-            { teamItemName: "Team H", icon: "H", duration: "2023-2024", backgroundColor: "black" },
+            { id: 5, teamItemName: "Team E", icon: "E", duration: "2023-2024", backgroundColor: "blue",},
+            { id: 6, teamItemName: "Team F", icon: "F", duration: "2023-2024", backgroundColor: "gold"},
+            { id: 7, teamItemName: "Team G", icon: "G", duration: "2023-2024", backgroundColor: "indigo"},
+            { id: 8, teamItemName: "Team H", icon: "H", duration: "2023-2024", backgroundColor: "black" },
+            // ... (repeat for other items)
           ]}
         />
       </div>
@@ -40,5 +43,4 @@ TeamListDisplay.propTypes = {
 };
 
 export default TeamListDisplay;
-
 

@@ -1,47 +1,49 @@
-import React, { useState, useEffect } from 'react';
+// useUserDataFetch.ts
+import { useState, useEffect } from 'react';
 
-interface UserDataProps {
-  userId: number; // Change to singular userId
+export interface Geo {
+  lat: string;
+  lng: string;
 }
 
-const UserData: React.FC<UserDataProps> = ({ userId }) => {
-  const [userData, setUserData] = useState<any>(null); // Change to singular userData
-  const [loading, setLoading] = useState(true);
+export interface Address {
+  street: string;
+  suite: string;
+  city: string;
+  zipcode: string;
+  geo: Geo;
+}
+
+export interface User {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  address: Address;
+}
+
+
+
+
+
+const FetchMembersData= () => {
+  const [membersData, setmembersData] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
+        const response = await fetch('https://jsonplaceholder.typicode.com/users');
         const data = await response.json();
-        setUserData(data);
-        setLoading(false);
+        setmembersData(data);
       } catch (error) {
-        console.error('Error fetching user data:', error);
-        setLoading(false);
+        console.error('Error fetching data:', error);
       }
     };
 
-    fetchUserData();
-  }, [userId]);
+    fetchData();
+  }, []); // The empty dependency array ensures that the effect runs once when the component mounts.
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!userData) {
-    return <div>Error fetching user data</div>;
-  }
-
-  return (
-    <div>
-      <h2>User Information</h2>
-      <div>
-        <p>{userData.name}</p>
-        <p>{userData.email}</p>
-        {/* Display additional user data as needed */}
-      </div>
-    </div>
-  );
+  return membersData;
 };
 
-export default UserData;
+export default FetchMembersData;

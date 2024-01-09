@@ -1,13 +1,15 @@
+// TeamItem.tsx
 import React from 'react';
 import { IsRightLayoutNarrowedContext } from '../layout/rightLayout/RightLayout';
 import { useContext } from 'react';
 
 export type TeamItemModel = {
+  id: number; // Add id property
   teamItemName: string;
   icon: string;
   duration: string;
   backgroundColor: string;
-  onClick?: () => void; // Make onClick optional
+  onClick?: () => void;
 };
 
 const TeamItem: React.FC<TeamItemModel> = (teamItemProps: TeamItemModel) => {
@@ -16,7 +18,6 @@ const TeamItem: React.FC<TeamItemModel> = (teamItemProps: TeamItemModel) => {
   const handleClick = () => {
     if (teamItemProps.onClick) {
       teamItemProps.onClick();
-      
     }
   };
 
