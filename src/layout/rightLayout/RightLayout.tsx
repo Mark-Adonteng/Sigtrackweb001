@@ -29,7 +29,7 @@ const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
     <div
       className={`third-section ${
         isNarrowed ? 'narrowed' : 'expanded3'
-      } w-${isNarrowed ? '20' : '80'} ml-8 bottom-0 min-h-full z-3 right-0 absolute mt-[-0.5rem]
+      } w-${isNarrowed ? '20' : '80'} ml-8 bottom-0 min-h-full z-20 right-0 absolute mt-[-0.5rem]
         transition-width flex justify-center items-center max-h-[96vh] bg-custom-bg
         transition-width duration-100 ease-in-out overflow-${
           isNarrowed ? 'hidden' : 'visible'

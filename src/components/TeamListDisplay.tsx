@@ -32,6 +32,7 @@ const TeamListDisplay: React.FC<{ teamSectionTitles: { team: string; suspendedTe
         />
       </div>
     </div>
+    
   );
 };
 

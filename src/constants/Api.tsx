@@ -1,5 +1,5 @@
-// useUserDataFetch.ts
-import { useState, useEffect } from 'react';
+// // useUserDataFetch.ts
+// import { useState, useEffect } from 'react';
 
 export interface Geo {
   lat: string;
@@ -22,28 +22,24 @@ export interface User {
   address: Address;
 }
 
+// // TeamMembersFetcher.tsx
+
+import { ConvertUsersToTeamMembers } from './Helpers';
 
 
 
+ export const fetchData = async () => {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    const data = await response.json() as User[];
+    const teamMembers = ConvertUsersToTeamMembers(data)
 
-const FetchMembersData= () => {
-  const [membersData, setmembersData] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/users');
-        const data = await response.json();
-        setmembersData(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []); // The empty dependency array ensures that the effect runs once when the component mounts.
-
-  return membersData;
+    return teamMembers;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return null;
+  }
 };
 
-export default FetchMembersData;
+
+

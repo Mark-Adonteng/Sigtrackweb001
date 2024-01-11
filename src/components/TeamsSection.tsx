@@ -1,28 +1,39 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TeamItemModel } from './TeamItem';
 import TeamItem from './TeamItem';
-import { useTeamContext } from '../components/TeamContext';
-import FetchMembersData from '../constants/Api';
-import TeamMembersList from './TeamMemberList'; // Update the path accordingly
+import { useTeamContext } from './TeamContext';
+import { fetchData } from '../constants/Api';
+import TeamMembersList from './TeamMemberList';
+; // Update the path accordingly
 
 interface TeamSectionProps {
   title: string;
   teamItemList: TeamItemModel[];
 }
 
-const TeamsSection: React.FC<TeamSectionProps> = (teamSectionProps: TeamSectionProps) => {
-  const { isNarrowed1, toggleIsNarrowed1 } = useTeamContext();
-  const members = FetchMembersData();
-  const [selectedTeamItem, setSelectedTeamItem] = useState<TeamItemModel | null>(null);
+// TeamsSection.tsx
+// ...
 
-  const handleTeamItemClick = (teamItem: TeamItemModel) => {
+const TeamsSection: React.FC<TeamSectionProps> = (teamSectionProps: TeamSectionProps) => {
+  const { isNarrowed1, toggleIsNarrowed1, setSelectedTeamItem, setMembers } = useTeamContext();
+
+
+  const handleTeamItemClick = async (teamItem: TeamItemModel) => {
     console.log(`Clicked on item with ID: ${teamItem.id} Team`);
     if (isNarrowed1) {
       toggleIsNarrowed1();
     }
 
-    // Set the selected team item
+    // Set the selected team item and fetch members data
     setSelectedTeamItem(teamItem);
+
+    // Move the data fetching logic here
+    const teamMembers = await fetchData();
+    console.log('Fetched team members:', teamMembers);
+
+    if (teamMembers) {
+      setMembers(teamMembers);
+    }
   };
 
   return (
@@ -42,8 +53,7 @@ const TeamsSection: React.FC<TeamSectionProps> = (teamSectionProps: TeamSectionP
         </div>
       ))}
 
-      {/* Pass the selected team item information to TeamMembersList */}
-      <TeamMembersList selectedTeamItem={selectedTeamItem} />
+  
     </div>
   );
 };
