@@ -1,15 +1,16 @@
 // MainSectionContent.js
 
 import React from 'react';
+import GoogleMapComponent from '../../components/GoogleMap';
 
 
-function MainLayoutContent() {
+function MainSectionContent() {
 
   return (
     <div>
-      <h1>Hello World!</h1>
+      <GoogleMapComponent/>
     </div>
   );
 }
 
-export default MainLayoutContent;
+export default MainSectionContent;

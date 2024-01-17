@@ -24,15 +24,32 @@ export interface User {
 
 // // TeamMembersFetcher.tsx
 
+// import { ConvertUsersToTeamMembers } from './Helpers';
+
+
+
+//  export const fetchData = async () => {
+//   try {
+//     const response = await fetch('https://jsonplaceholder.typicode.com/users');
+//     const data = await response.json() as User[];
+//     const teamMembers = ConvertUsersToTeamMembers(data)
+
+//     return teamMembers;
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+//     return null;
+//   }
+// };
+
+// TeamMembersFetcher.tsx
+import axios from 'axios';
 import { ConvertUsersToTeamMembers } from './Helpers';
 
-
-
- export const fetchData = async () => {
+export const fetchData = async () => {
   try {
-    const response = await fetch('https://jsonplaceholder.typicode.com/users');
-    const data = await response.json() as User[];
-    const teamMembers = ConvertUsersToTeamMembers(data)
+    const response = await axios.get<User[]>('https://jsonplaceholder.typicode.com/users');
+    const data = response.data;
+    const teamMembers = ConvertUsersToTeamMembers(data);
 
     return teamMembers;
   } catch (error) {
@@ -40,6 +57,7 @@ import { ConvertUsersToTeamMembers } from './Helpers';
     return null;
   }
 };
+
 
 
  

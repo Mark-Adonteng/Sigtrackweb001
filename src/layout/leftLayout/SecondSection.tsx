@@ -1,5 +1,7 @@
 import React, { useState, ReactNode, useEffect } from 'react';
 import { useTeamContext } from '../../components/TeamContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 
 interface SecondSectionProps {
   children: ReactNode;
@@ -39,13 +41,14 @@ const SecondSection: React.FC<SecondSectionProps> = ({ children }) => {
       style={wrapperStyles}
     >
       <div className="content-wrapper">
-        <button
-          className={`arrow-button1 ${rotation === 180 ? 'rotate' : ''} arrow-button ml-48 text-4xl transform transition-transform duration-100 ease-in-out absolute border-none shadow-none bg-transparent`}
-          onClick={handleButtonClick}
-          style={buttonStyles}
-        >
-          {'<'}
-        </button>
+      <button
+      className={`arrow-button1 ${rotation === 180 ? 'rotate' : ''} arrow-button ml-48 text-2xl text-slate-500 transform transition-transform duration-100 ease-in-out absolute border-none shadow-none 
+          bg-transparent right-0.5 top-${isNarrowed1 ? '0' : '0'} transform rotate-${rotation} transition-transform duration-500 ease-in-out`}
+      onClick={handleButtonClick}
+      style={buttonStyles}
+    >
+      <FontAwesomeIcon icon={faAngleLeft} />
+    </button>
       </div>
 
       {isNarrowed1 ? (

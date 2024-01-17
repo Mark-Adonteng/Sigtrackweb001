@@ -2,6 +2,8 @@
 import React, { useState, ReactNode } from 'react';
 import { createContext } from 'react';
 import TeamListDisplay from '../../components/TeamListDisplay';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 export const IsRightLayoutNarrowedContext = createContext(false);
 
@@ -37,13 +39,13 @@ const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
     >
       <div>
         <button
-          className={`arrow-button3 ${rotation === 180 ? 'rotate' : ''} text-4xl
+          className={`arrow-button3 ${rotation === 180 ? 'rotate' : ''} text-2xl text-slate-500
             transform transition-transform duration-100 ease-in-out absolute border-none 
             shadow-none bg-transparent ${isNarrowed ? 'top-0 right-0.5' : 'top-0 left-0.5'}`}
           onClick={handleButtonClick}
           style={{ transform: `rotate(${rotation}deg)` }}
         >
-          {'>'}
+          <FontAwesomeIcon icon={faAngleRight} />
         </button>
       </div>
 

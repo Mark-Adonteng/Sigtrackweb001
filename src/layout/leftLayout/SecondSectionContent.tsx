@@ -28,6 +28,7 @@ const SecondSectionContent: React.FC<SecondSectionContentProps> = ({ setMembers 
   return (
     <div className='info-btn'>
       
+      
       {selectedTeamItem && <TeamMembersList selectedTeamItem={selectedTeamItem} membersData={members} />}
     </div>
   );
