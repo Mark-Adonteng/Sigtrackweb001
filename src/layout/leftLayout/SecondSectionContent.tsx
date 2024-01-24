@@ -6,6 +6,12 @@ import { TeamItemModel } from '../../components/TeamItem';
 import { TeamMemberModel } from '../../components/TeamMemberItem';
 import { fetchData } from '../../constants/Api'; // Import the fetchData function
 
+import MembersFetch from '../../components/MembersFetch';
+import TeamList from '../../components/TeamList';
+
+
+
+
 interface SecondSectionContentProps {
   selectedTeamItem: TeamItemModel | null;
   setMembers: React.Dispatch<React.SetStateAction<TeamMemberModel[]>>;
@@ -30,6 +36,8 @@ const SecondSectionContent: React.FC<SecondSectionContentProps> = ({ setMembers 
       
       
       {selectedTeamItem && <TeamMembersList selectedTeamItem={selectedTeamItem} membersData={members} />}
+     {/* <MembersFetch/> */}
+     {/* <TeamList/>     */}
     </div>
   );
 };

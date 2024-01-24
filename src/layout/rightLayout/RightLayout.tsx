@@ -52,10 +52,10 @@ const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
       {isNarrowed && (
         <IsRightLayoutNarrowedContext.Provider value={isNarrowed}>
           <div className="ml-36 space-y-4">
-            <TeamListDisplay
+            {/* <TeamListDisplay
               teamSectionTitles={{ team: '', suspendedTeam: '' }}
              
-            />
+            /> */}
           </div>
         </IsRightLayoutNarrowedContext.Provider>
       )}
