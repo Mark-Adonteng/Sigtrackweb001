@@ -2,6 +2,7 @@
 
 import React from 'react';
 import GoogleMapComponent from '../../components/GoogleMap';
+import EsriMap from '../../components/EsriMap';
 
 
 function MainSectionContent() {
@@ -9,6 +10,7 @@ function MainSectionContent() {
   return (
     <div>
       <GoogleMapComponent/>
+      {/* <EsriMap/> */}
     </div>
   );
 }

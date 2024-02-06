@@ -1,5 +1,6 @@
+// SecondSection.tsx
 import React, { useState, ReactNode, useEffect } from 'react';
-import { useTeamContext } from '../../components/TeamContext';
+import { useNarrowContext } from '../../ContextTheme/NarrowedContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,17 +9,15 @@ interface SecondSectionProps {
 }
 
 const SecondSection: React.FC<SecondSectionProps> = ({ children }) => {
-  const { isNarrowed1, toggleIsNarrowed1 } = useTeamContext();
+  const { isNarrowed1, toggleIsNarrowed1 } = useNarrowContext();
   const [rotation, setRotation] = useState(0);
 
   useEffect(() => {
-    // Update the rotation based on the isNarrowed1 state
     const newRotation = isNarrowed1 ? 180 : 0;
     setRotation(newRotation);
   }, [isNarrowed1]);
 
   const handleButtonClick = () => {
-    // Toggle the isNarrowed1 state
     toggleIsNarrowed1();
   };
 
@@ -41,14 +40,14 @@ const SecondSection: React.FC<SecondSectionProps> = ({ children }) => {
       style={wrapperStyles}
     >
       <div className="content-wrapper">
-      <button
-      className={`arrow-button1 ${rotation === 180 ? 'rotate' : ''} arrow-button ml-48 text-2xl text-slate-500 transform transition-transform duration-100 ease-in-out absolute border-none shadow-none 
+        <button
+          className={`arrow-button1 ${rotation === 180 ? 'rotate' : ''} arrow-button ml-48 text-2xl text-slate-500 transform transition-transform duration-100 ease-in-out absolute border-none shadow-none 
           bg-transparent right-0.5 top-${isNarrowed1 ? '0' : '0'} transform rotate-${rotation} transition-transform duration-500 ease-in-out`}
-      onClick={handleButtonClick}
-      style={buttonStyles}
-    >
-      <FontAwesomeIcon icon={faAngleLeft} />
-    </button>
+          onClick={handleButtonClick}
+          style={buttonStyles}
+        >
+          <FontAwesomeIcon icon={faAngleLeft} />
+        </button>
       </div>
 
       {isNarrowed1 ? (

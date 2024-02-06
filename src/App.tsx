@@ -8,10 +8,13 @@ import MainLayout from './layout/mainLayout/MainLayout';
 import MainLayoutContent from './layout/mainLayout/MainLayoutContent';
 import { RightLayoutProvider } from './layout/rightLayout/RightLayoutContext';
 import { TeamProvider } from './components/TeamContext';
+import { SelectedMembersProvider } from './ContextTheme/membersContext';
+import { NarrowProvider } from './ContextTheme/NarrowedContext';
 
 const App: React.FC = () => {
   return (
-    <TeamProvider>
+    <SelectedMembersProvider>
+    <NarrowProvider>
          <div className='flex flex-col h-screen'>
       {/* Left Layout */}
       <LeftLayout className='md:w-1/4 md:h-full' />
@@ -28,7 +31,8 @@ const App: React.FC = () => {
         </RightLayout>
       </RightLayoutProvider>
     </div>
-    </TeamProvider>
+    </NarrowProvider>
+    </SelectedMembersProvider>
    
   );
 };

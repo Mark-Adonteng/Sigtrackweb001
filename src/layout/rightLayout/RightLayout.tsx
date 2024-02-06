@@ -4,6 +4,7 @@ import { createContext } from 'react';
 import TeamListDisplay from '../../components/TeamListDisplay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import TeamList from '../../components/TeamList';
 
 export const IsRightLayoutNarrowedContext = createContext(false);
 
@@ -39,7 +40,7 @@ const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
     >
       <div>
         <button
-          className={`arrow-button3 ${rotation === 180 ? 'rotate' : ''} text-2xl text-slate-500
+          className={`arrow-button3 ${rotation === 180 ? 'rotate' : ''} text-2xl text-slate-500 text-center
             transform transition-transform duration-100 ease-in-out absolute border-none 
             shadow-none bg-transparent ${isNarrowed ? 'top-0 right-0.5' : 'top-0 left-0.5'}`}
           onClick={handleButtonClick}
@@ -51,11 +52,9 @@ const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
 
       {isNarrowed && (
         <IsRightLayoutNarrowedContext.Provider value={isNarrowed}>
-          <div className="ml-36 space-y-4">
-            {/* <TeamListDisplay
-              teamSectionTitles={{ team: '', suspendedTeam: '' }}
-             
-            /> */}
+          <div className="ml-2 space-y-96">
+          <TeamList
+          displayIconsOnly ={true}/>
           </div>
         </IsRightLayoutNarrowedContext.Provider>
       )}

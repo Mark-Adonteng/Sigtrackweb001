@@ -35,7 +35,7 @@ const GoogleMapComponent: React.FC = () => {
 
   return (
     <LoadScript
-      googleMapsApiKey="AIzaSyAqN07R_clbELo78GBH_FSRv9-tx3zcQ7c"
+      googleMapsApiKey="AIzaSyDkw3a_XLgmpbUFB1yuuNj3o5cFlhP7HCo"
     >
            <div style={{ ...dropdownStyle, position: 'absolute', top: '10px', left: '250px', zIndex: 1 }}>
     
