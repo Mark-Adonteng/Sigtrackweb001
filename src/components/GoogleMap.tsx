@@ -4,17 +4,17 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 const containerStyle: React.CSSProperties = {
     position: 'absolute',
     top: 0,
-    left: "12.5vw",
+    left: "13vw",
     width: 'calc(105.5vw - 300px)', // Adjust the width as needed
     height: '100vh',
   };
   const dropdownStyle: React.CSSProperties = {
-    height: '50px', // Adjust the height as needed
-    borderRadius: '10px', // Make edges rounded
-    backgroundColor: '#fff', // Background color
-    padding: '5px', 
-    justifyContent:"center",
-    outline:"none"
+    // height: '50px', // Adjust the height as needed
+    // borderRadius: '10px', // Make edges rounded
+    // backgroundColor: '#fff', // Background color
+    // padding: '5px', 
+    // justifyContent:"center",
+    // outline:"none"
   };
   
 
@@ -37,7 +37,7 @@ const GoogleMapComponent: React.FC = () => {
     <LoadScript
       googleMapsApiKey="AIzaSyDkw3a_XLgmpbUFB1yuuNj3o5cFlhP7HCo"
     >
-           <div style={{ ...dropdownStyle, position: 'absolute', top: '10px', left: '250px', zIndex: 1 }}>
+           <div style={{ ...dropdownStyle, position: 'absolute', top: '10px', left: '250px', zIndex: 0}}>
     
         <select
           id="mapType"
