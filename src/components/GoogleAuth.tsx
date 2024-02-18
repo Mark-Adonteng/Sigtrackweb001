@@ -22,11 +22,19 @@ const GoogleAuth: React.FC<GoogleAuthProps> = ({ onGoogleLogin }) => {
   };
 
   return (
-        <div>
-            <button
+    <div className="flex items-center justify-center h-screen">
+      <div className='flex items-center justify-center bg-gray-200 h-64 w-96 rounded-3xl'>
+      <img
+          src="/src/assets/images/SIGTRACK.png"  // Replace with the path to your image
+          alt="Sigtrack Logo"
+          className="mb-28 absolute"      // Use mx-auto to center the image horizontally
+          style={{ maxWidth: '120px' }}  // Set a maximum width for the image
+        />
+        <h1 className='mt-10 ml-2 absolute font-serif font-bold'>Welcome to Sigtrack</h1>
+      <button
             onClick={handleGoogleLogin}
 
-            className="flex items-center justify-center  py-2 px-20  mt-2 bg-white hover:bg-gray-200 focus:ring-blue-500 ml-6 h-[50px] focus:ring-offset-blue-200 text-gray-700  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-[15px]"
+            className="flex items-center justify-center py-2 px-20  mt-36 bg-white hover:bg-gray-200 focus:ring-blue-500 ml-0 h-[50px] focus:ring-offset-blue-200 text-gray-700  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-[15px]"
           >
             <svg
               viewBox="0 0 24 24"
@@ -96,7 +104,10 @@ const GoogleAuth: React.FC<GoogleAuthProps> = ({ onGoogleLogin }) => {
             </svg>
             <span className="ml-2">Sign in with Google</span>
           </button>
-        </div>
+ 
+
+      </div>
+                 </div>
     )
 }
 

@@ -1,8 +1,6 @@
 // RightLayout.tsx
 import React, { useState, ReactNode } from 'react';
-import { createContext } from 'react';
-import TeamListDisplay from '../../components/TeamListDisplay';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { createContext } from 'react';import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import TeamList from '../../components/TeamList';
 
@@ -16,7 +14,7 @@ interface RightLayoutProps {
 const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
   const [rotation, setRotation] = useState(0);
   const [isNarrowed, setIsNarrowed] = useState(false);
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+  
 
   const handleButtonClick = () => {
     const newRotation = rotation === 0 ? 180 : 0;
@@ -24,25 +22,23 @@ const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
     setIsNarrowed(!isNarrowed);
   };
 
-  const handleTeamItemClick = (teamName: string) => {
-    setSelectedTeam(teamName);
-  };
+
 
   return (
     <div
-      className={`third-section ${
-        isNarrowed ? 'narrowed' : 'expanded3'
-      } w-${isNarrowed ? '20' : '80'} ml-8 bottom-0 min-h-full z-20 right-0 absolute mt-[-0.5rem]
-        transition-width flex justify-center items-center max-h-[96vh] bg-custom-bg
-        transition-width duration-100 ease-in-out overflow-${
-          isNarrowed ? 'hidden' : 'visible'
-        } ${isNarrowed ? 'w-10' : 'w-[300px]'} ${isNarrowed ? 'h-auto' : 'h-full'}`}
-    >
+    className={`third-section ${
+      isNarrowed ? 'bg-secondary-bg' : 'bg-primary-bg'
+    } w-${isNarrowed ? '20' : '80'} ml-8 bottom-0 min-h-full z-20 right-0 absolute mt-[-0.5rem]
+      transition-width flex justify-center items-center max-h-[96vh] text-primary-text
+      transition-width duration-100 ease-in-out overflow-${
+        isNarrowed ? 'hidden' : 'visible'
+      } ${isNarrowed ? 'w-10' : 'w-[300px]'} ${isNarrowed ? 'h-auto' : 'h-full'}`}
+  >
       <div>
         <button
-          className={`arrow-button3 ${rotation === 180 ? 'rotate' : ''} text-2xl text-slate-500 text-center
+          className={`arrow-button3 ${rotation === 180 ? 'rotate' : ''} text-2xl text-secondary-text text-center
             transform transition-transform duration-100 ease-in-out absolute border-none 
-            shadow-none bg-transparent ${isNarrowed ? 'top-0 right-0.5' : 'top-0 left-0.5'}`}
+            shadow-none bg-transparent ${isNarrowed ? 'top-0 right-3.5' : 'top-0 left-0.5'}`}
           onClick={handleButtonClick}
           style={{ transform: `rotate(${rotation}deg)` }}
         >
@@ -52,7 +48,7 @@ const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
 
       {isNarrowed && (
         <IsRightLayoutNarrowedContext.Provider value={isNarrowed}>
-          <div className="ml-2 space-y-96">
+          <div className="ml-12 space-y-96">
           <TeamList
           displayIconsOnly ={true}/>
           </div>

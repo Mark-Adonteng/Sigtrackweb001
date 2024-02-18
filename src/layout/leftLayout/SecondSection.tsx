@@ -22,19 +22,19 @@ const SecondSection: React.FC<SecondSectionProps> = ({ children }) => {
   };
 
   const wrapperStyles = {
-    width: isNarrowed1 ? '2rem' : '300px',
+    width: isNarrowed1 ? '1rem' : '300px',
     transition: 'width 0.1s ease-in-out',
   };
 
 
   return (
     <div
-      className="second-section z-20 ml-40 mt-[-0.5rem] absolute flex justify-center h-full items-center w-80 bottom-0 mr-auto bg-custom-bg"
+      className="second-section z-20 ml-24 mt-[-0.5rem] absolute flex justify-center h-full items-center w-80 bottom-0 mr-auto bg-primary-bg text-primary-text"
       style={wrapperStyles}
     >
       <div className="content-wrapper">
       <button
-          className={`arrow-button1 ml-48 text-2xl text-slate-500 transform transition-transform duration-100 ease-in-out absolute border-none 
+          className={`arrow-button1 ml-48 text-2xl text-secondary-text transform transition-transform duration-100 ease-in-out absolute border-none z-20
             shadow-none bg-transparent right-0.5 top-${isNarrowed1 ? '0' : '0'} ${rotation === 180 ? 'rotate-180' : ''} transition-transform duration-500 ease-in-out`}
           onClick={handleButtonClick}
         >

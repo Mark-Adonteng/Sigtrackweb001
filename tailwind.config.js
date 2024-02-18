@@ -8,12 +8,15 @@ export default {
     extend: {
       backgroundColor: {
         // Add your custom background colors here
-        'custom-bg': ' #D9D9D9', 
+        'primary-bg': 'rgba(0, 0, 0, 0.52)', 
+        'secondary-bg': ' rgba(0, 0, 0, 0.6)', 
+        'settingsAndbell-bg' : 'rgba(116, 116, 116, 1)'
+
       },
       textColor: {
         // Add your custom text colors here
-        'primary-text': 'black',
-        'secondary-text':'#708090',
+        'primary-text': 'rgba(255, 255, 255, 1)',
+        'secondary-text':'rgba(217, 217, 217, 1)',
        
       },
     },

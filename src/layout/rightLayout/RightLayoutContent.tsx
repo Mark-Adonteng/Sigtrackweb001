@@ -1,9 +1,6 @@
 
 import React from 'react';
 import Searchbar from '../../components/Searchbar';
-
-
-import TeamListDisplay from '../../components/TeamListDisplay';
 import AddandEditButton from '../../components/AddandEditButton';
 import SettingsButton from '../../components/SettingsButton';
 import TeamList from '../../components/TeamList';

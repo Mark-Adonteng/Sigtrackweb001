@@ -1,41 +1,91 @@
 import React, { useState } from 'react';
-import GoogleAuth from '../../components/GoogleAuth';
+import { auth, db } from '../../constants/services/firebase';
+import { getPasswords } from '../../constants/services/helpers/FetchPassword';
+import { getOrganizations } from '../../constants/services/helpers/getOrganization';
+import { getUserStatus } from '../../constants/services/helpers/getUserStatus';
+import UserTypesComponent from '../../constants/services/helpers/getUserType';
+
+
+
 
 interface LoginPageProps {
   onLogin: () => void;
 }
 
+interface OrganizationData {
+  userId: string;
+  organizationName: string;
+}
+
+interface PasswordData {
+  userId: string;
+  password: string;
+}
+
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
-  const [email, setemail] = useState('');
+  const [organization, setOrganization] = useState('');
   const [password, setPassword] = useState('');
-  const [googleAuthenticated, setGoogleAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(false); // Added loading state
 
-  const handleLogin = () => {
-    // Check if the user has authenticated with Google
-    if (!googleAuthenticated) {
-      console.log('User has not authenticated with Google');
-      // You can display an error message or take appropriate action
-      return;
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+  
+      const organizationsData = await getOrganizations();
+      const passwordsData = await getPasswords();
+      const statusData = await getUserStatus(); // Fetch user status
+  
+      const usersWithEnteredOrg = organizationsData.filter(
+        (org: OrganizationData) => org.organizationName === organization
+      );
+  
+      if (usersWithEnteredOrg.length > 0) {
+        for (const user of usersWithEnteredOrg) {
+          const userId = user.userId;
+  
+          const passwordMatch = passwordsData.some(
+            (pass: PasswordData) => pass.password === password && pass.userId === userId
+          );
+  
+          if (passwordMatch) {
+            // Check user status
+            const userStatus = statusData.find((status) => status.userId === userId);
+  
+            if (userStatus) {
+              if (userStatus.status === 'active') {
+                onLogin();
+                setLoading(false);
+                alert('Login successful!');
+                return;
+              } else if (userStatus.status === 'suspended') {
+                // Redirect to blank page with suspension message
+                document.body.innerHTML = '<div style="text-align: center; margin-top: 50px; font-size: 24px;">YOU ARE SUSPENDED</div>';
+                return;
+              }
+            }
+          }
+        }
+  
+        alert('Invalid password for all users with the entered organization');
+        setLoading(false);
+      } else {
+        alert('Invalid organization');
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Error fetching data. Please try again.');
+      setLoading(false);
     }
-
-    // Perform actual login logic here, e.g., make an API call
-    // If successful, call onLogin();
-    // If unsuccessful, handle the error or display an error message
-    // For simplicity, let's assume login is successful for now.
-    onLogin();
   };
-
-  const handleGoogleLogin = () => {
-    // Handle Google login callback, e.g., update state or navigate to a different page
-    console.log('Google login callback');
-    setGoogleAuthenticated(true); // Set the Google authentication status to true
-  };
-
+  
+  
   return (
     <div className="flex items-center justify-center h-screen">
+      
        
          <div
-    className="text-center justify-center w-96 h-[500px] bg-[rgb(217,_217,_217)] rounded-[60px]"
+    className="text-center justify-center w-96 h-[450px] bg-[rgb(217,_217,_217)] rounded-[60px]"
     >
           <img
           src="/src/assets/images/SIGTRACK.png"  // Replace with the path to your image
@@ -45,7 +95,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         />
         <h1 className='font-bold text-4xl mt-28 ml-10 absolute'> Sigtrack Login</h1>
         <div >
-            <input type='email' placeholder='enter email' onChange={(e) => setemail(e.target.value)}
+            <input type='text' placeholder='enter organization' onChange={(e) => setOrganization(e.target.value)}
             className='w-80 h-[50px] bg-white font-bold text-gray-400 p-4 rounded-[15px] mt-44' />
 
             <input type='text' placeholder='enter password' onChange={(e) => setPassword(e.target.value)}
@@ -53,20 +103,36 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         </div>
 
         <div>
-            <button  onClick={handleLogin} className='w-32 h-[50px] bg-black text-white text-2xl font-bold rounded-[15px] mt-6 ml-44'>
-                Sign In
-            </button>
+        <button
+            onClick={handleLogin}
+            className={`w-32 h-[50px] bg-black text-white text-2xl font-bold rounded-[15px] mt-6 ml-44 ${
+              loading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            disabled={loading}
+          >
+            {loading ? (
+             <div className="flex-col gap-4 w-full flex items-center justify-center">
+             <div className="w-10 h-10 border-8 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full">
+            
+              
+             </div>
+           </div>
+            ) : (
+              'Sign In'
+            )}
+          </button>
         </div>
         <hr className='text-white mt-2'></hr>
-        <GoogleAuth onGoogleLogin={handleGoogleLogin} />
+       
         <hr className='text-white mt-2'></hr>
-        {googleAuthenticated ? null : (
-          <div className="text-red-500 mt-2">Please authenticate with Google before signing in.</div>
-        )}
+       
         <div>
-          {/* <p className='font-bold text-sm mr-20'>Not registered, click here to register</p> */}
+          <p className='font-bold text-sm mr-20'>Not registered, click here to register</p>
         </div>
       </div>
+      <UserTypesComponent/>
+     
+      
     </div>
      
   );
