@@ -7,6 +7,7 @@ const AddandEditButton = () => {
             <button className="bg-white text-black px-4 py-2 rounded flex items-center">
                 <FaPen />
             </button>
+            
             <button className="bg-white text-black px-4 py-2 rounded">
                 Add Team
             </button>
