@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MemberPopup from '../../components/Popup';
-import { useSelectedMembers } from '../../ContextTheme/membersContext';
+import { useSelectedMembers } from '../../Context/membersContext';
 
 const SecondSectionContent = () => {
   const { selectedMembers, dispatch } = useSelectedMembers();

@@ -3,7 +3,7 @@ import { FaPen } from 'react-icons/fa'; // Assuming you have the React Icons lib
 
 const AddandEditButton = () => {
     return (
-        <div className="flex space-x-4 absolute mt-48 ml-20">
+        <div className="flex space-x-4 absolute top-80 ">
             <button className="bg-white text-black px-4 py-2 rounded flex items-center">
                 <FaPen />
             </button>

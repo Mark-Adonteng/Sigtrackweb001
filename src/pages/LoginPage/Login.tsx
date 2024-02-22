@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { auth, db } from '../../constants/services/firebase';
-import { getPasswords } from '../../constants/services/helpers/FetchPassword';
-import { getOrganizations } from '../../constants/services/helpers/getOrganization';
-import { getUserStatus } from '../../constants/services/helpers/getUserStatus';
-import UserTypesComponent from '../../constants/services/helpers/getUserType';
-
-
-
+import { auth, db } from '../../services/firebase';
+import { getPasswords } from '../../repo/getPassword';
+import { getOrganizations } from '../../repo/getOrganization';
+import { getUserStatus } from '../../repo/getUserStatus';
+import { useOrganizationContext } from '../../Context/organizationContext';
+import TeamNamesComponent from '../../repo/getTeamOrg';
 
 interface LoginPageProps {
   onLogin: () => void;
@@ -27,9 +25,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false); // Added loading state
 
+  const { setEnteredOrganization } = useOrganizationContext();
+
   const handleLogin = async () => {
     try {
       setLoading(true);
+
+      setEnteredOrganization(organization);
   
       const organizationsData = await getOrganizations();
       const passwordsData = await getPasswords();
@@ -98,7 +100,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             <input type='text' placeholder='enter organization' onChange={(e) => setOrganization(e.target.value)}
             className='w-80 h-[50px] bg-white font-bold text-gray-400 p-4 rounded-[15px] mt-44' />
 
-            <input type='text' placeholder='enter password' onChange={(e) => setPassword(e.target.value)}
+            <input type='password' placeholder='enter password' onChange={(e) => setPassword(e.target.value)}
              className='w-80 h-[50px] bg-white font-bold text-gray-400 p-4 rounded-[15px] mt-4' />
         </div>
 
@@ -130,7 +132,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           <p className='font-bold text-sm mr-20'>Not registered, click here to register</p>
         </div>
       </div>
-      <UserTypesComponent/>
+      {/* <TeamNamesComponent organization={organization} /> */}
      
       
     </div>

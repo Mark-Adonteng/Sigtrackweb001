@@ -1,6 +1,6 @@
 // SecondSection.tsx
 import React, { useState, ReactNode, useEffect } from 'react';
-import { useNarrowContext } from '../../ContextTheme/NarrowedContext';
+import { useNarrowContext } from '../../Context/NarrowedContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -29,7 +29,7 @@ const SecondSection: React.FC<SecondSectionProps> = ({ children }) => {
 
   return (
     <div
-      className="second-section z-20 ml-24 mt-[-0.5rem] absolute flex justify-center h-full items-center w-80 bottom-0 mr-auto bg-primary-bg text-primary-text"
+      className="second-section z-20 ml-16 mt-[-0.5rem] absolute flex justify-center h-full items-center w-80 bottom-0 mr-auto bg-primary-bg text-primary-text"
       style={wrapperStyles}
     >
       <div className="content-wrapper">

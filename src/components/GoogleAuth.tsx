@@ -1,7 +1,7 @@
 // GoogleAuth.tsx
 import React from 'react';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '../constants/services/firebase'; // Adjust the path based on your project structure
+import { auth } from '../services/firebase'; // Adjust the path based on your project structure
 
 interface GoogleAuthProps {
   onGoogleLogin: () => void;

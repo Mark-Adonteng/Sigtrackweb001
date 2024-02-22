@@ -1,10 +1,9 @@
-// TeamList.tsx
-
 import React, { useState, useEffect, useReducer } from 'react';
 import { collection, onSnapshot, getDoc, DocumentReference, doc } from 'firebase/firestore';
-import db from '../constants/services/Firestore';
-import { useSelectedMembers } from '../ContextTheme/membersContext';
-import { useNarrowContext } from '../ContextTheme/NarrowedContext';
+import db from '../services/Firestore';
+import { useSelectedMembers } from '../Context/membersContext';
+import { useNarrowContext } from '../Context/NarrowedContext';
+import { useOrganizationContext } from '../Context/organizationContext';
 
 interface Team {
   id: string;
@@ -17,6 +16,13 @@ interface Team {
   status: 'active' | 'suspended';
   members: DocumentReference[];
   timestamp: number; // Add timestamp for caching
+  organization?: string;
+  
+
+}
+interface OrganizationDocument {
+  name: string;
+  // Add other fields if necessary
 }
 
 interface TeamListProps {
@@ -44,6 +50,9 @@ const teamsReducer = (
 };
 
 const TeamList: React.FC<TeamListProps> = ({ displayIconsOnly = false }) => {
+
+  const { enteredOrganization } = useOrganizationContext();
+
   const { isNarrowed1, toggleIsNarrowed1 } = useNarrowContext();
   const { selectedMembers, dispatch } = useSelectedMembers();
 
@@ -52,22 +61,49 @@ const TeamList: React.FC<TeamListProps> = ({ displayIconsOnly = false }) => {
     suspendedTeams: [],
   });
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'Teams'), (snapshot) => {
+ // ...
+ useEffect(() => {
+  const fetchData = async () => {
+    const unsubscribe = onSnapshot(collection(db, 'Teams'), async (snapshot) => {
       const activeTeamsData: Team[] = [];
       const suspendedTeamsData: Team[] = [];
 
-      snapshot.forEach((doc) => {
-        const { name, date_established, color, status, members } = doc.data();
+      for (const doc of snapshot.docs) {
+        const { name, date_established, color, status, members, organization } = doc.data();
 
-        const teamData: Team = { id: doc.id, name, date_established, color, status, members, timestamp: Date.now() };
+        const teamData: Team = {
+          id: doc.id,
+          name,
+          date_established,
+          color,
+          status,
+          members,
+          organization,
+          timestamp: Date.now(),
+        };
 
-        if (status === 'active') {
-          activeTeamsData.push(teamData);
-        } else if (status === 'suspended') {
-          suspendedTeamsData.push(teamData);
+        try {
+          // Fetch the organization document using the reference
+          const orgDoc = await getDoc(organization);
+
+          if (orgDoc.exists()) {
+            const orgData = orgDoc.data() as OrganizationDocument;
+
+            // Compare the organization name with the entered organization
+            if (orgData.name === enteredOrganization) {
+              if (status === 'active') {
+                activeTeamsData.push(teamData);
+              } else if (status === 'suspended') {
+                suspendedTeamsData.push(teamData);
+              }
+            }
+          } else {
+            console.error(`Organization document not found for team ${teamData.name}`);
+          }
+        } catch (error) {
+          console.error('Error fetching organization document:', error);
         }
-      });
+      }
 
       teamsDispatch({ type: 'SET_ACTIVE_TEAMS', payload: activeTeamsData });
       teamsDispatch({ type: 'SET_SUSPENDED_TEAMS', payload: suspendedTeamsData });
@@ -76,9 +112,12 @@ const TeamList: React.FC<TeamListProps> = ({ displayIconsOnly = false }) => {
     });
 
     return () => unsubscribe();
-  }, []);
+  };
 
-  // Event handler for clicking a team name
+  fetchData();
+}, [enteredOrganization]);
+
+// ...
   const handleTeamNameClick = async (members: DocumentReference[]) => {
     console.log('Members value:', members);
 
@@ -128,14 +167,14 @@ const TeamList: React.FC<TeamListProps> = ({ displayIconsOnly = false }) => {
   };
 
   return (
-    <div className='mr-10 font-mono '>
+    <div className='bottom-24 -left-8 absolute font-mono '>
       {!displayIconsOnly && <h2 className="font-bold">Active Teams</h2>}
       <ul>
         {activeTeams.map((team) => (
-          <li key={team.id} className="flex items-center mb-2 cursor-pointer">
+          <li key={team.id} className="flex items-center mb-2 cursor-pointer ">
             {displayIconsOnly ? (
               <div
-                className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center`}
+                className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center `}
                 style={{
                   backgroundColor: team.color || 'brown',
                   color: 'white',

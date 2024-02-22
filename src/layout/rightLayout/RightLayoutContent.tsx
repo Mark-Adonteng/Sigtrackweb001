@@ -16,6 +16,8 @@ const RightLayoutContent = () => {
      {/* <TeamListDisplay
      teamSectionTitles={{ team: 'Team', suspendedTeam: 'Suspended Team' }}/> */}
      <TeamList/>
+  
+     
 
      <AddandEditButton/>
       

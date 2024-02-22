@@ -8,7 +8,7 @@ export default {
     extend: {
       backgroundColor: {
         // Add your custom background colors here
-        'primary-bg': 'rgba(0, 0, 0, 0.52)', 
+        'primary-bg': 'rgba(0, 0, 10, 0.52)', 
         'secondary-bg': ' rgba(0, 0, 0, 0.6)', 
         'settingsAndbell-bg' : 'rgba(116, 116, 116, 1)'
 

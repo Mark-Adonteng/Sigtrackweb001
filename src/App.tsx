@@ -8,15 +8,16 @@ import MainLayout from './layout/mainLayout/MainLayout';
 import MainLayoutContent from './layout/mainLayout/MainLayoutContent';
 import { RightLayoutProvider } from './layout/rightLayout/RightLayoutContext';
 import { TeamProvider } from './components/TeamContext';
-import { SelectedMembersProvider } from './ContextTheme/membersContext';
-import { NarrowProvider } from './ContextTheme/NarrowedContext';
+import { SelectedMembersProvider } from './Context/membersContext';
+import { NarrowProvider } from './Context/NarrowedContext';
 import LoginPage from './pages/LoginPage/Login';
 import GoogleAuth from './components/GoogleAuth';
+import { OrganizationProvider } from './Context/organizationContext';
 
 const App: React.FC = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [googleAuthenticated, setGoogleAuthenticated] = useState(false);
-  const [isSuspended, setIsSuspended] = useState(false);
+
 
   const handleLogin = () => {
     if (!googleAuthenticated) {
@@ -24,8 +25,7 @@ const App: React.FC = () => {
       // You can display an error message or take appropriate action
       return;
     }
-    const userIsSuspended = false; // Replace this with your actual check
-    setIsSuspended(userIsSuspended);
+ 
 
     setLoggedIn(true);
   };
@@ -38,8 +38,9 @@ const App: React.FC = () => {
 
   return (
     <SelectedMembersProvider>
-    <NarrowProvider>
-      <div className={`app-container ${isSuspended ? 'blur' : ''}`}>
+      <OrganizationProvider>
+      <NarrowProvider>
+      <div>
       {isLoggedIn ? (
         <div className='flex flex-col h-screen '>
           {/* Left Layout */}
@@ -60,7 +61,7 @@ const App: React.FC = () => {
       ) : (
         // Display the Login Page after successful Google authentication
         googleAuthenticated ? (
-          <LoginPage onLogin={handleLogin} isSuspended={isSuspended} setIsSuspended={setIsSuspended}/>
+          <LoginPage onLogin={handleLogin} />
         ) : (
           // Display the Google Authentication component if not authenticated
           <GoogleAuth onGoogleLogin={handleGoogleLogin} />
@@ -70,7 +71,10 @@ const App: React.FC = () => {
 
       </div>
         </NarrowProvider>
-  </SelectedMembersProvider>
+
+
+      </OrganizationProvider>
+      </SelectedMembersProvider>
     );
 };
 

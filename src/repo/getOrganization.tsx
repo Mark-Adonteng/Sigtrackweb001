@@ -1,5 +1,5 @@
 import { collection, getDocs, doc, getDoc, DocumentReference, QueryDocumentSnapshot } from 'firebase/firestore';
-import db from '../Firestore'; // Adjust the import path as needed
+import db from '../services/Firestore'; // Adjust the import path as needed
 
 interface OrganizationData {
   userId: string;

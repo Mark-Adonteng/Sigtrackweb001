@@ -3,6 +3,8 @@ import React, { useState, ReactNode } from 'react';
 import { createContext } from 'react';import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import TeamList from '../../components/TeamList';
+import TeamDisplay from '../../components/TeamDisplay';
+
 
 export const IsRightLayoutNarrowedContext = createContext(false);
 
@@ -28,7 +30,7 @@ const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
     <div
     className={`third-section ${
       isNarrowed ? 'bg-secondary-bg' : 'bg-primary-bg'
-    } w-${isNarrowed ? '20' : '80'} ml-8 bottom-0 min-h-full z-20 right-0 absolute mt-[-0.5rem]
+    } w-${isNarrowed ? '10' : '80'} ml-8 bottom-0 min-h-full z-20 right-0 absolute mt-[-0.5rem]
       transition-width flex justify-center items-center max-h-[96vh] text-primary-text
       transition-width duration-100 ease-in-out overflow-${
         isNarrowed ? 'hidden' : 'visible'
@@ -51,7 +53,9 @@ const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
           <div className="ml-12 space-y-96">
           <TeamList
           displayIconsOnly ={true}/>
+         
           </div>
+     
         </IsRightLayoutNarrowedContext.Provider>
       )}
 

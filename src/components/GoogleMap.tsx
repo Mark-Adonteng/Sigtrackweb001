@@ -4,8 +4,8 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 const containerStyle: React.CSSProperties = {
     position: 'absolute',
     top: 0,
-    left: "7vw",
-    width: 'calc(117.5vw - 400px)', // Adjust the width as needed
+    left: "5vw",
+    width: 'calc(120.5vw - 400px)', // Adjust the width as needed
     height: '100vh',
   };
   const dropdownStyle: React.CSSProperties = {
