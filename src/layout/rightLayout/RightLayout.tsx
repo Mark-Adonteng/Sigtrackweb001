@@ -50,7 +50,7 @@ const RightLayout: React.FC<RightLayoutProps> = ({ children }) => {
 
       {isNarrowed && (
         <IsRightLayoutNarrowedContext.Provider value={isNarrowed}>
-          <div className="ml-12 space-y-96">
+          <div className="ml-8 absolute space-y-96">
           <TeamList
           displayIconsOnly ={true}/>
          

@@ -19,7 +19,7 @@ const RightLayoutContent = () => {
   
      
 
-     <AddandEditButton/>
+     {/* <AddandEditButton/> */}
       
     
       </div>

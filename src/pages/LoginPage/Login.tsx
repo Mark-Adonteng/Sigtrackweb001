@@ -30,57 +30,51 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const handleLogin = async () => {
     try {
       setLoading(true);
-
       setEnteredOrganization(organization);
-  
+
       const organizationsData = await getOrganizations();
       const passwordsData = await getPasswords();
-      const statusData = await getUserStatus(); // Fetch user status
-  
+      const statusData = await getUserStatus();
+
       const usersWithEnteredOrg = organizationsData.filter(
         (org: OrganizationData) => org.organizationName === organization
       );
-  
-      if (usersWithEnteredOrg.length > 0) {
-        for (const user of usersWithEnteredOrg) {
-          const userId = user.userId;
-  
-          const passwordMatch = passwordsData.some(
-            (pass: PasswordData) => pass.password === password && pass.userId === userId
-          );
-  
-          if (passwordMatch) {
-            // Check user status
-            const userStatus = statusData.find((status) => status.userId === userId);
-  
-            if (userStatus) {
-              if (userStatus.status === 'active') {
-                onLogin();
-                setLoading(false);
-                alert('Login successful!');
-                return;
-              } else if (userStatus.status === 'suspended') {
-                // Redirect to blank page with suspension message
-                document.body.innerHTML = '<div style="text-align: center; margin-top: 50px; font-size: 24px;">YOU ARE SUSPENDED</div>';
-                return;
-              }
+
+      for (const user of usersWithEnteredOrg) {
+        const userId = user.userId;
+
+        const passwordMatch = passwordsData.some(
+          (pass: PasswordData) => pass.password === password && pass.userId === userId
+        );
+
+        if (passwordMatch) {
+          const userStatus = statusData.find((status) => status.userId === userId);
+
+          if (userStatus) {
+            if (userStatus.status === 'active') {
+              onLogin();
+              setLoading(false);
+              alert('Login successful!');
+              return;
+            } else if (userStatus.status === 'suspended') {
+              // Handle suspension more gracefully
+              // Redirecting to a different page or showing a modal would be better
+              alert('YOU ARE SUSPENDED');
+              return;
             }
           }
         }
-  
-        alert('Invalid password for all users with the entered organization');
-        setLoading(false);
-      } else {
-        alert('Invalid organization');
-        setLoading(false);
       }
+
+      alert('Invalid password for all users with the entered organization');
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
       alert('Error fetching data. Please try again.');
       setLoading(false);
     }
   };
-  
+
   
   return (
     <div className="flex items-center justify-center h-screen">

@@ -1,9 +1,9 @@
-import { collection, getDocs, doc, getDoc, DocumentReference, QueryDocumentSnapshot } from 'firebase/firestore';
-import db from '../services/Firestore'; // Adjust the import path as needed
+import { collection, getDocs, doc, getDoc, DocumentReference } from 'firebase/firestore';
+import db from '../services/Firestore';
 
 interface OrganizationData {
   userId: string;
-  organizationName: string; // Update the type based on your actual data structure
+  organizationName: string;
 }
 
 const getOrganizations = async (): Promise<OrganizationData[]> => {
@@ -14,15 +14,23 @@ const getOrganizations = async (): Promise<OrganizationData[]> => {
     const organizationsData: OrganizationData[] = [];
 
     for (const userDoc of querySnapshot.docs) {
-      const organizationRef = userDoc.data().organization as DocumentReference;
-      const organizationDoc = await getDoc(organizationRef);
+      let organizationName = 'Organization not specified';
 
-      if (organizationDoc.exists()) {
-        const organizationName = organizationDoc.data().name;
-        organizationsData.push({ userId: userDoc.id, organizationName });
-      } else {
-        organizationsData.push({ userId: userDoc.id, organizationName: 'Organization not found' });
+      const organizationField = userDoc.data().organization;
+
+      if (typeof organizationField === 'string') {
+        organizationName = organizationField;
+      } else if (organizationField instanceof DocumentReference) {
+        const organizationDoc = await getDoc(organizationField);
+
+        if (organizationDoc.exists()) {
+          organizationName = organizationDoc.data().name;
+        } else {
+          organizationName = 'Organization not found';
+        }
       }
+
+      organizationsData.push({ userId: userDoc.id, organizationName });
     }
 
     return organizationsData;

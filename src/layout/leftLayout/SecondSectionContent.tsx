@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MemberPopup from '../../components/Popup';
 import { useSelectedMembers } from '../../Context/membersContext';
+import AddMembersButton from '../../components/AddMembersButton';
+import { AddMembersProps } from '../../components/AddMembersButton';
 
 const SecondSectionContent = () => {
   const { selectedMembers, dispatch } = useSelectedMembers();
@@ -12,7 +14,7 @@ const SecondSectionContent = () => {
 
   const handleMemberClick = (name: string, event: React.MouseEvent<HTMLDivElement>) => {
     setPopupVisible(true);
-    setSelectedMember({ name });
+    setSelectedMember({ name, dateCreated });
   };
 
   const handlePopupMouseEnter = () => {
@@ -48,19 +50,21 @@ const SecondSectionContent = () => {
     }
   }, [dispatch]);
 
+  const handleAddMembers = async () => {
+
+    
+
+  }
+
   return (
-    <div>
+    <div className='font-mono font-bold'>
       {/* Display the selected members */}
-      {selectedMembers && (
+      {selectedMembers && selectedMembers.trim() !== "" ? (
         <div className="fixed top-8 -ml-32">
           <h3 className="font-bold">Team Members</h3>
           <ul>
             {selectedMembers.split(',').map((member, index) => {
               const [name] = member.trim().split(' ');
-             
-
-              // Convert timestamp to a human-readable date
-             
 
               return (
                 <li key={index} className="flex items-center mb-2">
@@ -74,16 +78,20 @@ const SecondSectionContent = () => {
                   <div className="flex flex-col">
                     <div
                       className="text-sm font-bold cursor-pointer"
-                      onClick={(event) => handleMemberClick(name,event)}
+                      onClick={(event) => handleMemberClick(name, event)}
                     >
                       {name}
                     </div>
-                    
                   </div>
                 </li>
               );
             })}
           </ul>
+        </div>
+      ) : (
+        <div className="fixed top-8 -ml-32">
+          <h3 className="font-bold">Team Members</h3>
+          <p>No members</p>
         </div>
       )}
 
@@ -102,6 +110,8 @@ const SecondSectionContent = () => {
           </div>
         )}
       </div>
+      <AddMembersButton onAddClick={handleAddMembers} />
+
     </div>
   );
 };
