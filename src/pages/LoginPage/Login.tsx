@@ -5,6 +5,7 @@ import { getOrganizations } from '../../repo/getOrganization';
 import { getUserStatus } from '../../repo/getUserStatus';
 import { useOrganizationContext } from '../../Context/organizationContext';
 import TeamNamesComponent from '../../repo/getTeamOrg';
+import FirstSectionContent from '../../layout/leftLayout/FirstSectionContent';
 
 interface LoginPageProps {
   onLogin: () => void;
@@ -75,6 +76,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     }
   };
 
+  const handleLogout = () => {
+    // Implement logout logic here
+    // For example, you can clear user authentication state, redirect to the login page, etc.
+    alert('Logout successful!');
+  };
+
   
   return (
     <div className="flex items-center justify-center h-screen">
@@ -127,6 +134,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         </div>
       </div>
       {/* <TeamNamesComponent organization={organization} /> */}
+
+    
      
       
     </div>

@@ -1,5 +1,6 @@
 import { collection, getDocs, QueryDocumentSnapshot } from 'firebase/firestore';
 import db from '../services/Firestore'; // Adjust the import path as needed
+import { FIREBASE } from '../constants/firebase';
 
 interface Status {
   userId: string;
@@ -8,7 +9,7 @@ interface Status {
 
 const getUserStatus = async (): Promise<Status[]> => {
   try {
-    const usersCollection = collection(db, 'users');
+    const usersCollection = collection(db, FIREBASE .USERS);
     const querySnapshot = await getDocs(usersCollection);
 
     const statusData: Status[] = [];

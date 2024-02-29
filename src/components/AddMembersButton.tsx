@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { FaPen } from 'react-icons/fa';
 import { db } from '../services/firebase';
-import { collection, addDoc, doc, runTransaction } from 'firebase/firestore';
+import { collection, addDoc, doc, runTransaction,DocumentReference, updateDoc ,getDoc} from 'firebase/firestore';
 import { useOrganizationContext } from '../Context/organizationContext';
 import { Team } from './TeamList';
+import { useTeamId } from '../Context/TeamIdContext';
+import { arrayUnion } from 'firebase/firestore';
+
 
 export interface AddMembersProps {
   onAddMembersClick: () => void;
-
+  teamId: string; // Add teamId as a prop
 }
 
 interface Member {
@@ -30,8 +33,10 @@ interface Member {
 
 const AddMembersButton: React.FC<AddMembersProps> = ({ onAddMembersClick }) => {
   const { enteredOrganization } = useOrganizationContext();
+  const { teamId } = useTeamId();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<Member>({
+    
     userId: '',
     callSign: '',
     name: '',
@@ -55,43 +60,54 @@ const AddMembersButton: React.FC<AddMembersProps> = ({ onAddMembersClick }) => {
   const handleFormSubmit = async () => {
     try {
       // Add validation logic here if needed
-
+  
       // Add the new member to Firestore
-      const memberDocRef = await addDoc(collection(db, 'users'), formData);
-
+      const userDocRef = await addDoc(collection(db, 'users'), formData);
+      const userReference: DocumentReference = doc(db, 'users', userDocRef.id);
+  
       // Update the corresponding team's document in the Teams collection
-      const teamIdToUpdate = 'teamId'; // Replace 'teamId' with the actual team ID
-      const teamDocRef = doc(db, 'Teams', teamIdToUpdate);
-
-      await runTransaction(db, async (transaction) => {
-        const teamDoc = await transaction.get(teamDocRef);
-
+      const teamIdToUpdate = teamId || '';
+      console.log('Updating team with ID:', teamIdToUpdate);
+  
+      if (teamIdToUpdate) {
+        const teamDocRef = doc(db, 'Teams', teamIdToUpdate);
+        const teamDoc = await getDoc(teamDocRef);
+  
         if (teamDoc.exists()) {
-          const teamData = teamDoc.data() as Team;
-          const updatedMembers = [...teamData.members, memberDocRef];
-
-          // Update the team's members field in Firestore within a transaction
-          transaction.update(teamDocRef, { members: updatedMembers });
+          const teamData = teamDoc.data();
+          const membersArray = teamData?.members || [];
+  
+          await runTransaction(db, async (transaction) => {
+            // Add the new member reference to the members array
+            transaction.update(teamDocRef, {
+              members: arrayUnion(userReference),
+            });
+  
+            console.log('New member added with ID:', userDocRef.id);
+            setIsModalOpen(false);
+          });
         } else {
-          console.error(`Team document not found for team ID: ${teamIdToUpdate}`);
+          console.error('Team document not found for teamId:', teamIdToUpdate);
         }
-      });
-
-      console.log('New member added with ID:', memberDocRef.id);
-      setIsModalOpen(false);
+      } else {
+        console.error('Invalid teamId. Cannot update team document.');
+      }
     } catch (error) {
       console.error('Error adding new member:', error);
     }
   };
+  
+
+
   return (
-    <div className="flex space-x-4 absolute top-72 mr-32 -left-28 w-96 text-black">
-      <button className="bg-white text-black px-4 py-2 rounded" onClick={handleAddMemberClick}>
+    <div className="flex space-x-4 absolute top-72 mr-32 -left-28 w-96 text-black text-sm">
+      <button className="bg-white text-black px-4 py-2 rounded absolute" onClick={handleAddMemberClick}>
         Add Members
       </button>
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded">
+          <div className="bg-gray-200 p-4 rounded">
           <h2 className='text-center'>Member Details</h2>
             <div>
               <label>Name:</label>
@@ -163,13 +179,13 @@ const AddMembersButton: React.FC<AddMembersProps> = ({ onAddMembersClick }) => {
 
             <button
               onClick={handleFormSubmit}
-              className="button is-success w-20 bg-black text-white text-2xl font-bold rounded-sm mt-6 mr-10"
+              className="button is-success w-20 bg-black text-white  font-bold rounded-sm mt-6 mr-10"
             >
               Submit
             </button>
             <button
               onClick={handleModalClose}
-              className="button button is-success w-24 bg-black text-white text-2xl font-bold rounded-sm mt-6"
+              className="button button is-success w-24 bg-black text-white font-bold rounded-sm mt-6"
             >
               Cancel
             </button>

@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { RiPencilFill, RiDeleteBin6Line } from 'react-icons/ri';
 import MemberPopup from '../../components/Popup';
 import { useSelectedMembers } from '../../Context/membersContext';
 import AddMembersButton from '../../components/AddMembersButton';
-import { AddMembersProps } from '../../components/AddMembersButton';
+
+interface AddMembersProps {
+  onAddMembersClick: () => void;
+}
 
 const SecondSectionContent = () => {
   const { selectedMembers, dispatch } = useSelectedMembers();
@@ -12,7 +16,7 @@ const SecondSectionContent = () => {
   const memberRef = useRef<HTMLDivElement>(null);
   let timer: NodeJS.Timeout;
 
-  const handleMemberClick = (name: string, event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMemberClick = (name: string, dateCreated: string, event: React.MouseEvent<HTMLDivElement>) => {
     setPopupVisible(true);
     setSelectedMember({ name, dateCreated });
   };
@@ -39,52 +43,68 @@ const SecondSectionContent = () => {
 
   useEffect(() => {
     // Save selectedMembers to local storage
-    localStorage.setItem('selectedMembers', selectedMembers || '');
+    localStorage.setItem('selectedMembers', JSON.stringify(selectedMembers));
   }, [selectedMembers]);
 
   useEffect(() => {
     // Load selectedMembers from local storage
     const loadedSelectedMembers = localStorage.getItem('selectedMembers');
     if (loadedSelectedMembers) {
-      dispatch({ type: 'SET_SELECTED_MEMBERS', payload: loadedSelectedMembers });
+      dispatch({ type: 'SET_SELECTED_MEMBERS', payload: JSON.parse(loadedSelectedMembers) });
     }
   }, [dispatch]);
 
   const handleAddMembers = async () => {
-
-    
-
-  }
+    // Add logic for adding members
+  };
 
   return (
-    <div className='font-mono font-bold'>
-      {/* Display the selected members */}
-      {selectedMembers && selectedMembers.trim() !== "" ? (
+    <div className="font-mono font-bold">
+      {selectedMembers && selectedMembers.trim() !== '' ? (
         <div className="fixed top-8 -ml-32">
           <h3 className="font-bold">Team Members</h3>
           <ul>
             {selectedMembers.split(',').map((member, index) => {
-              const [name] = member.trim().split(' ');
+              const [name, dateCreated] = member.trim().split(' ');
 
               return (
-                <li key={index} className="flex items-center mb-2">
+                <li key={index} className="flex items-center mb-4">
+                <div
+                  ref={memberRef}
+                  className="bg-red-500 text-white rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center cursor-pointer"
+                  onClick={(event) => handleMemberClick(name, dateCreated, event)}
+                >
+                  {name.charAt(0)}
+                </div>
+                <div className="flex flex-col">
                   <div
-                    ref={memberRef}
-                    className="bg-red-500 text-white rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center cursor-pointer"
-                    onClick={(event) => handleMemberClick(name, event)}
+                    className="text-sm font-bold cursor-pointer"
+                    onClick={(event) => handleMemberClick(name, dateCreated, event)}
                   >
-                    {name.charAt(0)}
+                    {name}
                   </div>
-                  <div className="flex flex-col">
-                    <div
-                      className="text-sm font-bold cursor-pointer"
-                      onClick={(event) => handleMemberClick(name, event)}
-                    >
-                      {name}
-                    </div>
+                  <div className="flex items-center absolute space-x-2 ml-36 mt-1"> {/* Adjusted spacing here */}
+                    <RiPencilFill
+                      className="text-primary cursor-pointer"
+                      onClick={() => {
+                        // Add logic for editing member
+                        console.log(`Edit ${name}`);
+                      }}
+                    />
+                    <RiDeleteBin6Line
+                      className="text-red-500 cursor-pointer"
+                      onClick={() => {
+                        // Add logic for deleting member
+                        console.log(`Delete ${name}`);
+                      }}
+                    />
                   </div>
-                </li>
-              );
+                  <div className="text-xs text-secondary-text "> {/* Adjusted spacing here */}
+                    {new Date(dateCreated).toLocaleDateString()}
+                  </div>
+                </div>
+              </li>
+            );
             })}
           </ul>
         </div>
@@ -95,10 +115,9 @@ const SecondSectionContent = () => {
         </div>
       )}
 
-      {/* Render the popup if it's visible */}
       <div ref={popupRef} onMouseEnter={handlePopupMouseEnter} onMouseLeave={handlePopupMouseLeave}>
         {popupVisible && selectedMember && (
-          <div className='absolute w-72 bottom-48 ml-36 text-black bg-white p-2 rounded whitespace-pre'>
+          <div className="absolute w-72 bottom-48 ml-36 text-black bg-white p-2 rounded whitespace-pre">
             <MemberPopup
               memberName={selectedMember.name}
               dateCreated={selectedMember.dateCreated}
@@ -110,8 +129,7 @@ const SecondSectionContent = () => {
           </div>
         )}
       </div>
-      <AddMembersButton onAddClick={handleAddMembers} />
-
+      <AddMembersButton onAddMembersClick={handleAddMembers} teamId='teamId'/>
     </div>
   );
 };

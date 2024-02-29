@@ -8,6 +8,7 @@ import AddandEditButton from './AddandEditButton';
 import AddTeamModal from './AddTeamModal';
 import { RiPencilFill, RiDeleteBin6Line } from 'react-icons/ri';
 import EditTeamModal from './EditTeamModal';
+import { useTeamId } from '../Context/TeamIdContext';
 
 
 
@@ -107,7 +108,7 @@ const TeamList: React.FC<TeamListProps> = ({ displayIconsOnly = false }) => {
           } else if (organization instanceof DocumentReference) {
             // If organization is a DocumentReference, fetch the document
             const orgDoc = await getDoc(organization);
-            
+
             if (orgDoc.exists()) {
               const orgData = orgDoc.data() as OrganizationDocument;
 
@@ -140,13 +141,17 @@ const TeamList: React.FC<TeamListProps> = ({ displayIconsOnly = false }) => {
   };
 
   fetchData();
-}, [enteredOrganization]);
-// ...
-const handleTeamNameClick = async (members: DocumentReference[]) => {
+}, [enteredOrganization, dispatch, teamsDispatch]);
+
+
+const { setTeamId } = useTeamId();
+
+const handleTeamNameClick = async (members: DocumentReference[], teamId: string) => {
   try {
     // Check if members array is not empty
     if (members.length === 0) {
       console.error('No members found for the selected team.');
+      console.log('Clicked Team ID:', teamId);
 
       // Clear sessionStorage and dispatch empty data
       sessionStorage.removeItem('selectedMembers');
@@ -160,8 +165,7 @@ const handleTeamNameClick = async (members: DocumentReference[]) => {
       return;
     }
 
-    const teamId = members[0].id; // Assuming the team document is stored in the first member's reference
-    console.log('Clicked Team ID:', teamId);
+    console.log('Clicked Team ID:', teamId); // Log the teamId to the console
 
     const userNames: string[] = [];
     let teamDateCreated: Date | undefined;
@@ -197,6 +201,8 @@ const handleTeamNameClick = async (members: DocumentReference[]) => {
         type: 'SET_SELECTED_MEMBERS',
         payload: `${userNames.join(', ')} (${teamDateCreated?.toLocaleDateString()})`,
       });
+
+      setTeamId(teamId);
     }
   } catch (error) {
     console.error('Error fetching user document:', error);
@@ -326,12 +332,6 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
 };
 
 
-
-
-
-
-  
-
   return (
     <div className='mb-2 -left-8  -mt-72 font-mono absolute '>
       <div className='-ml-8 '>
@@ -354,13 +354,14 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
       {!displayIconsOnly && <h2 className="font-bold">Active Teams</h2>}
       <ul>
         {activeTeams.map((team) => (
-          <li key={team.id} className="flex items-center mb-2 cursor-pointer ">
+          <li key={team.id} className="flex items-center mb-2 cursor-pointer space-y-2 ">
             {displayIconsOnly ? (
               <div
-                className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center `}
+                className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center space-y-10  `}
                 style={{
                   backgroundColor: team.color || 'brown',
                   color: 'white',
+                 
                 }}
               >
                 {team.name.charAt(0)}
@@ -368,7 +369,7 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
             ) : (
               <>
                 <div
-                  className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center`}
+                  className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center space-y-2`}
                   style={{
                     backgroundColor: team.color || 'brown',
                     color: 'white',
@@ -377,13 +378,13 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
                   {team.name.charAt(0)}
                 </div>
                 <div className="font-semibold">
-                  <div onClick={() => handleTeamNameClick(team.members)}>
+                  <div onClick={() =>handleTeamNameClick(team.members, team.id)}>
                     <div className="text-sm font-bold  text-primary-text">{team.name}</div>
                     <div className="text-xs text-secondary-text">{team.date_established?.seconds && new Date(team.date_established.seconds * 1000).toLocaleDateString()}</div>
                   </div>
                 </div>
 
-                <div className="flex ml-auto space-x-2">
+                <div className="flex ml-auto space-x-2 ">
                   <RiPencilFill
                     className="text-primary cursor-pointer"
                     onClick={() => handleEditButtonClick(team.id)}
@@ -403,12 +404,13 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
       {!displayIconsOnly && <h2 className="font-bold mt-4">Suspended Teams</h2>}
       <ul>
         {suspendedTeams.map((team) => (
-          <li key={team.id} className="flex items-center mb-2 cursor-pointer">
+          <li key={team.id} className="flex items-center mb-2 cursor-pointer  space-y-2">
             {displayIconsOnly ? (
               <div
-                className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center`}
+                className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center  `}
                 style={{
-                  backgroundColor: team.color || 'brown',
+                  backgroundColor: 'transparent', // Set background color to transparent
+                  
                   color: 'white',
                 }}
               >
@@ -426,7 +428,7 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
                   {team.name.charAt(0)}
                 </div>
                 <div className="font-semibold">
-                  <div onClick={() => handleTeamNameClick(team.members)}>
+                  <div onClick={() => handleTeamNameClick(team.members, team.id)}>
                     <div className="text-sm font-bold text-primary-text">{team.name}</div>
                     <div className="text-xs text-secondary-text">
                       {team.date_established?.seconds && new Date(team.date_established.seconds * 1000).toLocaleDateString()}

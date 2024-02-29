@@ -8,7 +8,7 @@ interface AddandEditButtonProps {
 
 const AddandEditButton: React.FC<AddandEditButtonProps> = ({ onAddClick }) => {
     return (
-        <div className="flex space-x-4 absolute top-96 mt-52 ml-10 ">
+        <div className="flex space-x-4 absolute top-96 mt-[230px] ml-10 ">
         
             
             <button className="bg-white text-black px-4 py-2 rounded"

@@ -33,6 +33,7 @@
 import React, { useEffect } from 'react';
 import { collection, getDocs, QueryDocumentSnapshot } from 'firebase/firestore';
 import db from '../services/Firestore'; // Adjust the import path as needed
+import { FIREBASE } from '../constants/firebase';
 
 interface UserTypeData {
   userId: string;
@@ -43,7 +44,7 @@ const UserTypesComponent: React.FC = () => {
   useEffect(() => {
     const getUserType = async (): Promise<UserTypeData[]> => {
       try {
-        const usersCollection = collection(db, 'users');
+        const usersCollection = collection(db, FIREBASE.USERS);
         const querySnapshot = await getDocs(usersCollection);
 
         const userTypeData: UserTypeData[] = [];

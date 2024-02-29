@@ -1,5 +1,6 @@
 import { collection, getDocs, doc, getDoc, DocumentReference } from 'firebase/firestore';
 import db from '../services/Firestore';
+import { FIREBASE } from '../constants/firebase';
 
 interface OrganizationData {
   userId: string;
@@ -8,7 +9,7 @@ interface OrganizationData {
 
 const getOrganizations = async (): Promise<OrganizationData[]> => {
   try {
-    const usersCollection = collection(db, 'users');
+    const usersCollection = collection(db, FIREBASE.USERS);
     const querySnapshot = await getDocs(usersCollection);
 
     const organizationsData: OrganizationData[] = [];

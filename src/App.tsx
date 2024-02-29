@@ -7,75 +7,80 @@ import LeftLayout from './layout/leftLayout/LeftLayout';
 import MainLayout from './layout/mainLayout/MainLayout';
 import MainLayoutContent from './layout/mainLayout/MainLayoutContent';
 import { RightLayoutProvider } from './layout/rightLayout/RightLayoutContext';
-import { TeamProvider } from './components/TeamContext';
 import { SelectedMembersProvider } from './Context/membersContext';
 import { NarrowProvider } from './Context/NarrowedContext';
 import LoginPage from './pages/LoginPage/Login';
 import GoogleAuth from './components/GoogleAuth';
 import { OrganizationProvider } from './Context/organizationContext';
+import { TeamIdProvider } from './Context/TeamIdContext';
+import { LogoutProvider } from './Context/LogoutContext';
 
 const App: React.FC = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [googleAuthenticated, setGoogleAuthenticated] = useState(false);
 
-
   const handleLogin = () => {
     if (!googleAuthenticated) {
       console.log('User has not authenticated with Google');
-      // You can display an error message or take appropriate action
       return;
     }
- 
 
     setLoggedIn(true);
   };
+
   const handleGoogleLogin = () => {
-    // Handle Google login callback, e.g., update state or navigate to a different page
     console.log('Google login callback');
-    setGoogleAuthenticated(true); // Set the Google authentication status to true
+    setGoogleAuthenticated(true);
   };
 
+  const handleLogout = () => {
+    window.location.reload();
+    // Implement logout logic here
+    // For example, clear user authentication state, redirect to the login page, etc.
+    setLoggedIn(false);
+    setGoogleAuthenticated(false);
+    console.log('Logout successful!');
+  };
 
   return (
-    <SelectedMembersProvider>
-      <OrganizationProvider>
-      <NarrowProvider>
-      <div>
-      {isLoggedIn ? (
-        <div className='flex flex-col h-screen '>
-          {/* Left Layout */}
-          <LeftLayout className='md:w-1/4 md:h-full' />
+    <LogoutProvider handleLogout={handleLogout}>
+      <SelectedMembersProvider>
+        <OrganizationProvider>
+          <NarrowProvider>
+            <TeamIdProvider>
+              <div>
+                {isLoggedIn ? (
+                  <div className='flex flex-col h-screen '>
+                    {/* Left Layout */}
+                    <LeftLayout className='md:w-1/4 md:h-full' />
 
-          {/* Main Layout */}
-          <MainLayout className='md:w-1/2 md:h-full'>
-            <MainLayoutContent />
-          </MainLayout>
+                    {/* Main Layout */}
+                    <MainLayout className='md:w-1/2 md:h-full'>
+                      <MainLayoutContent />
+                    </MainLayout>
 
-          {/* Right Layout */}
-          <RightLayoutProvider>
-            <RightLayout className='md:w-1/4 md:h-full'>
-              <RightLayoutContent />
-            </RightLayout>
-          </RightLayoutProvider>
-        </div>
-      ) : (
-        // Display the Login Page after successful Google authentication
-        googleAuthenticated ? (
-          <LoginPage onLogin={handleLogin} />
-        ) : (
-          // Display the Google Authentication component if not authenticated
-          <GoogleAuth onGoogleLogin={handleGoogleLogin} />
-        )
-      )}
-
-
-      </div>
-        </NarrowProvider>
-
-
-      </OrganizationProvider>
+                    {/* Right Layout */}
+                    <RightLayoutProvider>
+                      <RightLayout className='md:w-1/4 md:h-full'>
+                        <RightLayoutContent />
+                      </RightLayout>
+                    </RightLayoutProvider>
+                  </div>
+                ) : (
+                  // Display the Login Page after successful Google authentication
+                  googleAuthenticated ? (
+                    <LoginPage onLogin={handleLogin} />
+                  ) : (
+                    // Display the Google Authentication component if not authenticated
+                    <GoogleAuth onGoogleLogin={handleGoogleLogin} />
+                  ))}
+              </div>
+            </TeamIdProvider>
+          </NarrowProvider>
+        </OrganizationProvider>
       </SelectedMembersProvider>
-    );
+    </LogoutProvider>
+  );
 };
 
 export default App;

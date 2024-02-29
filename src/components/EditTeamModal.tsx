@@ -28,10 +28,9 @@ const EditTeamModal: React.FC<{
 
   return (
     // Your modal UI
-    <div className='fixed  bg-white text-black w-96 rounded-lg shadow-md p-6 -ml-96 mr-20'>
+    <div className='fixed  bg-gray-200 text-black w-96 rounded-lg shadow-md p-6 -ml-96 mr-20 text-sm'>
     <div className={`modal ${isOpen ? 'open' : 'closed'}`}>
       <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
         <h2 className='text-center'>Edit Team</h2>
 
         {/* Editable fields */}
@@ -43,7 +42,7 @@ const EditTeamModal: React.FC<{
             className='input bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 '
             onChange={(e) => setEditedName(e.target.value)}
           />
-        </label>
+        </label><br></br>
 
         <label>
           Color:
@@ -64,8 +63,9 @@ const EditTeamModal: React.FC<{
           </select>
         </label><br></br>
 
-        <label>
-          Description:
+        <label className='flex'>
+           Description:
+        
           <textarea
             value={editedDescription}
             className='input bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 '
@@ -75,10 +75,10 @@ const EditTeamModal: React.FC<{
 
         {/* Add other form fields as needed */}
 
-          <button className="button is-success w-44  bg-black text-white text-2xl font-bold rounded-sm  mt-6 mr-10" onClick={handleSubmit}>
+          <button className="button is-success w-28  bg-black text-white  font-bold rounded-sm  mt-6 mr-10" onClick={handleSubmit}>
             Save Changes
           </button>
-          <button className="button button is-success w-24  bg-black text-white text-2xl font-bold rounded-sm mt-6"  
+          <button className="button button is-success w-20  bg-black text-white font-bold rounded-sm mt-6"  
           onClick={() => {
     onClose(); // Close the modal when the "Cancel" button is clicked
     closeEditModal(); // Optionally, you can also call closeEditModal to reset state in the parent component
