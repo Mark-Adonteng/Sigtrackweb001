@@ -6,6 +6,8 @@ import { useOrganizationContext } from '../Context/organizationContext';
 import { Team } from './TeamList';
 import { useTeamId } from '../Context/TeamIdContext';
 import { arrayUnion } from 'firebase/firestore';
+import { useTeamMembersContext } from '../Context/TeamMembersContext';
+
 
 
 export interface AddMembersProps {
@@ -13,7 +15,7 @@ export interface AddMembersProps {
   teamId: string; // Add teamId as a prop
 }
 
-interface Member {
+export interface Member {
   userId: string;
   callSign: string;
   name: string;
@@ -34,6 +36,8 @@ interface Member {
 const AddMembersButton: React.FC<AddMembersProps> = ({ onAddMembersClick }) => {
   const { enteredOrganization } = useOrganizationContext();
   const { teamId } = useTeamId();
+  const { setTeamMembers } = useTeamMembersContext();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<Member>({
     
@@ -50,7 +54,18 @@ const AddMembersButton: React.FC<AddMembersProps> = ({ onAddMembersClick }) => {
   });
 
   const handleAddMemberClick = () => {
+    // Set the current timestamp for the dateCreated field
+    const currentTimestamp = Date.now();
     setIsModalOpen(true);
+    
+    // Update the formData with the current timestamp
+    setFormData({
+      ...formData,
+      dateCreated: {
+        seconds: Math.floor(currentTimestamp / 1000),
+        nanoseconds: (currentTimestamp % 1000) * 1000000,
+      },
+    });
   };
 
   const handleModalClose = () => {
@@ -60,29 +75,39 @@ const AddMembersButton: React.FC<AddMembersProps> = ({ onAddMembersClick }) => {
   const handleFormSubmit = async () => {
     try {
       // Add validation logic here if needed
-  
+
+      // Add the new member to the local state
+      const newMember = {
+        ...formData,
+        dateCreated: new Date(formData.dateCreated.seconds * 1000),
+        userId: teamId, // Use teamId as the userId for simplicity, you can modify this as needed
+      };
+
+      // Update the UI by setting the new member to the TeamMembers context state
+      setTeamMembers((prevMembers) => [...prevMembers, newMember]);
+
       // Add the new member to Firestore
       const userDocRef = await addDoc(collection(db, 'users'), formData);
       const userReference: DocumentReference = doc(db, 'users', userDocRef.id);
-  
+
       // Update the corresponding team's document in the Teams collection
       const teamIdToUpdate = teamId || '';
       console.log('Updating team with ID:', teamIdToUpdate);
-  
+
       if (teamIdToUpdate) {
         const teamDocRef = doc(db, 'Teams', teamIdToUpdate);
         const teamDoc = await getDoc(teamDocRef);
-  
+
         if (teamDoc.exists()) {
           const teamData = teamDoc.data();
           const membersArray = teamData?.members || [];
-  
+
           await runTransaction(db, async (transaction) => {
             // Add the new member reference to the members array
             transaction.update(teamDocRef, {
               members: arrayUnion(userReference),
             });
-  
+
             console.log('New member added with ID:', userDocRef.id);
             setIsModalOpen(false);
           });
@@ -96,7 +121,6 @@ const AddMembersButton: React.FC<AddMembersProps> = ({ onAddMembersClick }) => {
       console.error('Error adding new member:', error);
     }
   };
-  
 
 
   return (

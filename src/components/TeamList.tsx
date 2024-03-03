@@ -9,7 +9,7 @@ import AddTeamModal from './AddTeamModal';
 import { RiPencilFill, RiDeleteBin6Line } from 'react-icons/ri';
 import EditTeamModal from './EditTeamModal';
 import { useTeamId } from '../Context/TeamIdContext';
-
+import { useTeamMembersContext } from '../Context/TeamMembersContext';
 
 
 export interface Team {
@@ -37,6 +37,11 @@ interface TeamListProps {
   displayIconsOnly?: boolean; // Boolean prop to control the display of icons only
 }
 
+interface MemberData {
+  name: string;
+  dateCreated: string | Date;
+}
+
 // Define action types
 type ActionType =
   | { type: 'SET_ACTIVE_TEAMS'; payload: Team[] }
@@ -57,12 +62,14 @@ const teamsReducer = (
   }
 };
 
+
 const TeamList: React.FC<TeamListProps> = ({ displayIconsOnly = false }) => {
 
   const { enteredOrganization } = useOrganizationContext();
 
   const { isNarrowed1, toggleIsNarrowed1 } = useNarrowContext();
   const { selectedMembers, dispatch } = useSelectedMembers();
+
 
   const [{ activeTeams, suspendedTeams }, teamsDispatch] = useReducer(teamsReducer, {
     activeTeams: [],
@@ -146,68 +153,67 @@ const TeamList: React.FC<TeamListProps> = ({ displayIconsOnly = false }) => {
 
 const { setTeamId } = useTeamId();
 
+
+const { setTeamMembers } = useTeamMembersContext();
+
 const handleTeamNameClick = async (members: DocumentReference[], teamId: string) => {
   try {
-    // Check if members array is not empty
-    if (members.length === 0) {
-      console.error('No members found for the selected team.');
-      console.log('Clicked Team ID:', teamId);
-
-      // Clear sessionStorage and dispatch empty data
-      sessionStorage.removeItem('selectedMembers');
-      sessionStorage.removeItem('teamDateCreated');
-
-      dispatch({
-        type: 'SET_SELECTED_MEMBERS',
-        payload: null,
-      });
-
-      return;
-    }
-
     console.log('Clicked Team ID:', teamId); // Log the teamId to the console
 
-    const userNames: string[] = [];
-    let teamDateCreated: Date | undefined;
+    const teamMembersData: { name: string; dateCreated: string | Date }[] = [];
+    let teamDateCreated: Date | undefined = new Date(Date.now()); // Initialize with the current date and time
 
-    // Assuming members is an array of DocumentReference
-    for (const memberRef of members) {
-      const userId = memberRef.id; // Extract user ID from the reference
-      const userDoc = await getDoc(doc(db, 'users', userId));
+    if (members.length === 0) {
+      // If there are no members, set a default message
+      // teamMembersData.push({ name: 'No members in this team', dateCreated: '' });
+    } else {
+      // Assuming members is an array of DocumentReference
+      for (const memberRef of members) {
+        const userId = memberRef.id; // Extract user ID from the reference
+        const userDoc = await getDoc(doc(db, 'users', userId));
 
-      if (userDoc.exists()) {
-        const { name } = userDoc.data() as { name: string };
-        userNames.push(name);
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const memberName = userData?.name || '';
+
+          // Set memberDateCreated to Date.now() for new members
+          let memberDateCreated: string | Date = new Date(Date.now());
+
+          if ('dateCreated' in userData && userData.dateCreated !== undefined) {
+            const timestamp = userData.dateCreated.seconds * 1000;
+            memberDateCreated = new Date(timestamp);
+          } else {
+            // If dateCreated is already a date, use it directly
+            memberDateCreated = userData?.dateCreated || '';
+          }
+
+          teamMembersData.push({ name: memberName, dateCreated: memberDateCreated });
+        }
       }
     }
 
-    // Fetch the dateCreated field from the first member's team document
-    const teamDoc = await getDoc(members[0]); // Assuming the team document is stored in the first member's reference
-    if (teamDoc.exists()) {
-      const { dateCreated } = teamDoc.data() as { dateCreated: { seconds: number; nanoseconds: number } };
-      teamDateCreated = new Date(dateCreated.seconds * 1000); // Convert timestamp to Date
+    if (isNarrowed1) {
+      toggleIsNarrowed1();
     }
 
-    if (userNames.length > 0) {
-      if (isNarrowed1) {
-        toggleIsNarrowed1();
-      }
+    // Set the state to display members below the clicked team
+    setTeamMembers(teamMembersData);
 
-      // Save selectedMembers and teamDateCreated to sessionStorage
-      sessionStorage.setItem('selectedMembers', JSON.stringify(userNames));
-      sessionStorage.setItem('teamDateCreated', JSON.stringify(teamDateCreated));
+    // Save selectedMembers and teamDateCreated to sessionStorage
+    sessionStorage.setItem('selectedMembers', JSON.stringify(teamMembersData));
+    sessionStorage.setItem('teamDateCreated', JSON.stringify(teamDateCreated));
 
-      dispatch({
-        type: 'SET_SELECTED_MEMBERS',
-        payload: `${userNames.join(', ')} (${teamDateCreated?.toLocaleDateString()})`,
-      });
+    dispatch({
+      type: 'SET_SELECTED_MEMBERS',
+      payload: `${teamMembersData.map((member) => `${member.name} - ${member.dateCreated}`).join(', ')}`,
+    });
 
-      setTeamId(teamId);
-    }
+    setTeamId(teamId);
   } catch (error) {
     console.error('Error fetching user document:', error);
   }
 };
+
 
 
 
@@ -383,6 +389,7 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
                     <div className="text-xs text-secondary-text">{team.date_established?.seconds && new Date(team.date_established.seconds * 1000).toLocaleDateString()}</div>
                   </div>
                 </div>
+
 
                 <div className="flex ml-auto space-x-2 ">
                   <RiPencilFill

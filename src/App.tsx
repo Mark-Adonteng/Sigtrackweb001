@@ -14,6 +14,7 @@ import GoogleAuth from './components/GoogleAuth';
 import { OrganizationProvider } from './Context/organizationContext';
 import { TeamIdProvider } from './Context/TeamIdContext';
 import { LogoutProvider } from './Context/LogoutContext';
+import { TeamMembersProvider } from './Context/TeamMembersContext';
 
 const App: React.FC = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -45,6 +46,7 @@ const App: React.FC = () => {
   return (
     <LogoutProvider handleLogout={handleLogout}>
       <SelectedMembersProvider>
+        <TeamMembersProvider>
         <OrganizationProvider>
           <NarrowProvider>
             <TeamIdProvider>
@@ -78,6 +80,7 @@ const App: React.FC = () => {
             </TeamIdProvider>
           </NarrowProvider>
         </OrganizationProvider>
+        </TeamMembersProvider>
       </SelectedMembersProvider>
     </LogoutProvider>
   );
