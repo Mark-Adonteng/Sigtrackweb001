@@ -15,6 +15,7 @@ import { OrganizationProvider } from './Context/organizationContext';
 import { TeamIdProvider } from './Context/TeamIdContext';
 import { LogoutProvider } from './Context/LogoutContext';
 import { TeamMembersProvider } from './Context/TeamMembersContext';
+import { MemberProvider } from './Context/MemberIdContext';
 
 const App: React.FC = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -50,6 +51,7 @@ const App: React.FC = () => {
         <OrganizationProvider>
           <NarrowProvider>
             <TeamIdProvider>
+              <MemberProvider>
               <div>
                 {isLoggedIn ? (
                   <div className='flex flex-col h-screen '>
@@ -77,6 +79,7 @@ const App: React.FC = () => {
                     <GoogleAuth onGoogleLogin={handleGoogleLogin} />
                   ))}
               </div>
+              </MemberProvider>
             </TeamIdProvider>
           </NarrowProvider>
         </OrganizationProvider>

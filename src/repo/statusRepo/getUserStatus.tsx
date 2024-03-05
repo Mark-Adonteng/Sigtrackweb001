@@ -1,6 +1,6 @@
 import { collection, getDocs, QueryDocumentSnapshot } from 'firebase/firestore';
-import db from '../services/Firestore'; // Adjust the import path as needed
-import { FIREBASE } from '../constants/firebase';
+import db from '../../services/Firestore'; // Adjust the import path as needed
+import { FIREBASE } from '../../constants/firebase';
 
 interface Status {
   userId: string;

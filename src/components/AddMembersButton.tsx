@@ -31,7 +31,6 @@ export interface Member {
   organization?: string;
 }
 
-// ... (existing imports)
 
 const AddMembersButton: React.FC<AddMembersProps> = ({ onAddMembersClick }) => {
   const { enteredOrganization } = useOrganizationContext();

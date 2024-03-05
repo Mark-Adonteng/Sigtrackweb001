@@ -37,9 +37,16 @@ interface TeamListProps {
   displayIconsOnly?: boolean; // Boolean prop to control the display of icons only
 }
 
-interface MemberData {
+export interface MemberData {
   name: string;
   dateCreated: string | Date;
+  userId: string;
+  callSign: string;
+  status: string;
+  user_type: string;
+  longitude: number;
+  latitude: number;
+  password: string;
 }
 
 // Define action types
@@ -66,9 +73,10 @@ const teamsReducer = (
 const TeamList: React.FC<TeamListProps> = ({ displayIconsOnly = false }) => {
 
   const { enteredOrganization } = useOrganizationContext();
-
   const { isNarrowed1, toggleIsNarrowed1 } = useNarrowContext();
   const { selectedMembers, dispatch } = useSelectedMembers();
+  const [showConfirmDeleteForm, setShowConfirmDeleteForm] = useState(false);
+  const [ConfirmDeleteformData, setConfirmDeleteFormData] = useState<{ name: string;teamId:string } | null>(null);
 
 
   const [{ activeTeams, suspendedTeams }, teamsDispatch] = useReducer(teamsReducer, {
@@ -160,7 +168,7 @@ const handleTeamNameClick = async (members: DocumentReference[], teamId: string)
   try {
     console.log('Clicked Team ID:', teamId); // Log the teamId to the console
 
-    const teamMembersData: { name: string; dateCreated: string | Date }[] = [];
+    const teamMembersData: MemberData[] = [];
     let teamDateCreated: Date | undefined = new Date(Date.now()); // Initialize with the current date and time
 
     if (members.length === 0) {
@@ -175,6 +183,13 @@ const handleTeamNameClick = async (members: DocumentReference[], teamId: string)
         if (userDoc.exists()) {
           const userData = userDoc.data();
           const memberName = userData?.name || '';
+          const memberCallSign = userData?.callSign || ''; // Assuming callSign is a string
+          const memberStatus = userData?.status || ''; // Assuming status is a string
+          const memberUserType = userData?.user_type || ''; // Assuming user_type is a string
+          const memberLongitude = userData?.longitude || 0; // Assuming longitude is a number
+          const memberLatitude = userData?.latitude || 0; // Assuming latitude is a number
+          const memberPassword = userData?.password || ''; 
+      
 
           // Set memberDateCreated to Date.now() for new members
           let memberDateCreated: string | Date = new Date(Date.now());
@@ -187,7 +202,21 @@ const handleTeamNameClick = async (members: DocumentReference[], teamId: string)
             memberDateCreated = userData?.dateCreated || '';
           }
 
-          teamMembersData.push({ name: memberName, dateCreated: memberDateCreated });
+          const memberUserId = userId; // Get the userId
+          
+
+          teamMembersData.push({
+            name: memberName,
+            dateCreated: memberDateCreated,
+            userId: memberUserId,
+            callSign: memberCallSign,
+            status: memberStatus,
+            user_type: memberUserType,
+            longitude: memberLongitude,
+            latitude: memberLatitude,
+            password: memberPassword,
+          });
+ 
         }
       }
     }
@@ -205,9 +234,9 @@ const handleTeamNameClick = async (members: DocumentReference[], teamId: string)
 
     dispatch({
       type: 'SET_SELECTED_MEMBERS',
-      payload: `${teamMembersData.map((member) => `${member.name} - ${member.dateCreated}`).join(', ')}`,
+      payload: `${teamMembersData.map((member) => `${member.name} - ${member.dateCreated} - ${member.userId}`).join(', ')}`,
     });
-
+   
     setTeamId(teamId);
   } catch (error) {
     console.error('Error fetching user document:', error);
@@ -275,14 +304,34 @@ const handleSubmitForm = async ({
 //   console.log('Edit button clicked for team ID:', teamId);
 // };
 
+const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+
 const handleDeleteButtonClick = async (teamId: string) => {
+  // Set the selected team ID and team data for confirmation message
+  setSelectedTeamId(teamId);
+
+  // Find the team data for the selected team ID
+  const selectedTeam = activeTeams.find(team => team.id === teamId) || suspendedTeams.find(team => team.id === teamId);
+
+  // Set ConfirmDeleteformData with the selected team's name
+  setConfirmDeleteFormData({
+    name: selectedTeam?.name || '',
+    teamId: teamId,
+  });
+
+  // Open the confirmation form
+  setShowConfirmDeleteForm(true);
+};
+
+
+const handleConfirmDelete = async () => {
   try {
-    // Delete the team document from Firestore
-    await deleteDoc(doc(db, 'Teams', teamId));
+    // Delete the team document from Firestore using the selected team ID
+    await deleteDoc(doc(db, 'Teams', selectedTeamId || ''));
     
     // Update UI by filtering out the deleted team
-    const updatedActiveTeams = activeTeams.filter(team => team.id !== teamId);
-    const updatedSuspendedTeams = suspendedTeams.filter(team => team.id !== teamId);
+    const updatedActiveTeams = activeTeams.filter(team => team.id !== selectedTeamId);
+    const updatedSuspendedTeams = suspendedTeams.filter(team => team.id !== selectedTeamId);
     
     teamsDispatch({ type: 'SET_ACTIVE_TEAMS', payload: updatedActiveTeams });
     teamsDispatch({ type: 'SET_SUSPENDED_TEAMS', payload: updatedSuspendedTeams });
@@ -291,10 +340,20 @@ const handleDeleteButtonClick = async (teamId: string) => {
     localStorage.setItem('activeTeams', JSON.stringify(updatedActiveTeams));
     localStorage.setItem('suspendedTeams', JSON.stringify(updatedSuspendedTeams));
 
-    console.log('Team deleted successfully:', teamId);
+    // Reset selected team ID and close the confirmation form
+    setSelectedTeamId(null);
+    setShowConfirmDeleteForm(false);
+
+    console.log('Team deleted successfully:', selectedTeamId);
   } catch (error) {
     console.error('Error deleting team:', error);
   }
+};
+
+const handleCancelDelete = () => {
+  // Reset selected team ID and close the confirmation form
+  setSelectedTeamId(null);
+  setShowConfirmDeleteForm(false);
 };
 
 const [editedTeam, setEditedTeam] = useState<Team | null>(null);
@@ -459,9 +518,32 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
         ))}
       </ul>
 
+       {/* Display form when showForm is true */}
+       {showConfirmDeleteForm && (
+        <div className="fixed inset-0 bg-gray-900 text-black bg-opacity-50 flex justify-center items-center text-sm">
+          <div className=' bg-gray-200 text-black w-96 text-center rounded-lg shadow-md p-6  text-sm'>
+          <h2 className="text-lg font-semibold mb-2">Are you sure you want to delete {ConfirmDeleteformData?.name} </h2>
+          <button onClick={handleConfirmDelete}
+          className='w-20  bg-black text-white  font-bold rounded-sm  mt-6 mr-10'>Yes</button>
+          <button onClick={handleCancelDelete}
+          className='w-20  bg-black text-white  font-bold rounded-sm  mt-6 mr-10'>No</button>
+        </div>
+        </div>
+      )}
+
      
-      <AddandEditButton onAddClick={handleAddButtonClick}  />
-      {/* {isModalOpen && <AddTeamModal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmitForm} />} */}
+      {/* <AddandEditButton onAddClick={handleAddButtonClick}  /> */}
+      <div className="flex space-x-4 absolute top-96 mt-[241px] ml-10 ">
+        
+            
+        <button className="bg-white text-black px-4 py-2 rounded text-sm"
+       onClick={handleAddButtonClick} >
+            Add Team
+        </button>
+        
+        
+    </div>
+     
     </div>
   );
 };

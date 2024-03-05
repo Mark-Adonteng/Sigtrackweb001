@@ -1,9 +1,17 @@
 // TeamMembersContext.tsx
 import React, { createContext, useContext, ReactNode, Dispatch, SetStateAction } from 'react';
 
-interface MemberData {
+export interface MemberData {
   name: string;
   dateCreated: string | Date;
+  userId:string;
+  callSign:string;
+  status:string;
+  user_type:string;
+  latitude:number;
+  longitude:number;
+  password:string;
+  organization:string;
 }
 
 interface TeamMembersContextProps {

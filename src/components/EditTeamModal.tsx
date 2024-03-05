@@ -28,9 +28,9 @@ const EditTeamModal: React.FC<{
 
   return (
     // Your modal UI
-    <div className='fixed  bg-gray-200 text-black w-96 rounded-lg shadow-md p-6 -ml-96 mr-20 text-sm'>
+    <div className='fixed inset-0 bg-gray-900 text-black bg-opacity-50 flex justify-center items-center text-sm'>
     <div className={`modal ${isOpen ? 'open' : 'closed'}`}>
-      <div className="modal-content">
+      <div className=" bg-gray-200 text-black w-76 rounded-lg shadow-md p-6 text-sm">
         <h2 className='text-center'>Edit Team</h2>
 
         {/* Editable fields */}
@@ -46,7 +46,7 @@ const EditTeamModal: React.FC<{
 
         <label>
           Color:
-          <input type="text" 
+          <input type="color" 
           value={editedColor} 
           className='input bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150'
           onChange={(e) => setEditedColor(e.target.value)} />
@@ -57,7 +57,7 @@ const EditTeamModal: React.FC<{
           <select value={editedStatus} 
           className='input bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150'
           onChange={(e) => setEditedStatus(e.target.value)}>
-            
+             <option value="select">Select</option>
             <option value="active">Active</option>
             <option value="suspended">Suspended</option>
           </select>
@@ -72,11 +72,10 @@ const EditTeamModal: React.FC<{
             onChange={(e) => setEditedDescription(e.target.value)}
           />
         </label>
-
-        {/* Add other form fields as needed */}
-
-          <button className="button is-success w-28  bg-black text-white  font-bold rounded-sm  mt-6 mr-10" onClick={handleSubmit}>
-            Save Changes
+          
+            <div className='text-center'>
+          <button className="button is-success w-20  bg-black text-white  font-bold rounded-sm  mt-6 mr-10" onClick={handleSubmit}>
+            Update
           </button>
           <button className="button button is-success w-20  bg-black text-white font-bold rounded-sm mt-6"  
           onClick={() => {
@@ -85,6 +84,7 @@ const EditTeamModal: React.FC<{
   }}>
             Cancel
           </button>
+          </div>
       </div>
     </div>
     </div>

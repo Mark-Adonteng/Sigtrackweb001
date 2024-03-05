@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { auth, db } from '../../services/firebase';
-import { getPasswords } from '../../repo/getPassword';
-import { getOrganizations } from '../../repo/getOrganization';
-import { getUserStatus } from '../../repo/getUserStatus';
+import { getPasswords } from '../../repo/passwordRepo/getPassword';
+import { getOrganizations } from '../../repo/organizationRepo/getOrganization';
+import { getUserStatus } from '../../repo/statusRepo/getUserStatus';
 import { useOrganizationContext } from '../../Context/organizationContext';
 import TeamNamesComponent from '../../repo/getTeamOrg';
 import FirstSectionContent from '../../layout/leftLayout/FirstSectionContent';

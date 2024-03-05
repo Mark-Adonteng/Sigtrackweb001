@@ -54,7 +54,7 @@ const AddTeamModal: React.FC<AddTeamModalProps> = ({ isOpen, onClose, onSubmit }
           <select value={userEnteredStatus} 
           className='input bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150'
           onChange={(e) => setUserEnteredStatus(e.target.value)}>
-            
+            <option value="Select Status">Select Status</option>
             <option value="active">Active</option>
             <option value="suspended">Suspended</option>
           </select>
@@ -64,7 +64,7 @@ const AddTeamModal: React.FC<AddTeamModalProps> = ({ isOpen, onClose, onSubmit }
             <label className="label">Color:</label>
             <input
               className="input bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
-              type="text"
+              type="color"
               value={userEnteredColor}
               onChange={(e) => setUserEnteredColor(e.target.value)}
             />

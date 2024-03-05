@@ -1,6 +1,6 @@
 import { collection, getDocs, doc, getDoc, DocumentReference } from 'firebase/firestore';
-import db from '../services/Firestore';
-import { FIREBASE } from '../constants/firebase';
+import db from '../../services/Firestore';
+import { FIREBASE } from '../../constants/firebase';
 
 interface OrganizationData {
   userId: string;
