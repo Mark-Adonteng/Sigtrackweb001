@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MemberData} from '../components//TeamList'; 
+import { MemberData} from '../Context/TeamMembersContext'; 
 
 
 
@@ -38,7 +38,7 @@ const EditMemberModal: React.FC<{
     <div className='fixed inset-0 bg-gray-900 text-black bg-opacity-50 flex justify-center items-center text-sm'>
     <div className={`modal ${isOpen ? 'open' : 'closed'}`}>
       <div className="modal-content bg-gray-200 text-black w-76 rounded-lg shadow-md p-6 text-sm">
-        <h2 className='text-center'>Edit Member Deatails</h2>
+        <h2 className='text-center'>Edit Member Details</h2>
 
         {/* Editable fields */}
         <label>

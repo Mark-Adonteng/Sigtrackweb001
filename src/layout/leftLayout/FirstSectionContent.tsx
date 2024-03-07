@@ -40,7 +40,7 @@ const FirstSectionContent: React.FC<FirstSectionContentProps> = ({ onLogout }) =
           <img
             src="/src/assets/images/mesh.svg"
             alt="Sigtrack Logo"
-            className="mb-6 absolute w-28 bottom-20 -ml-3"
+            className="mb-6 absolute w-28 bottom-20 -ml-3 cursor-pointer"
             onClick={() => openLink('https://client.meshtastic.org/')} // Replace with your desired link
           />
         </div>
@@ -49,8 +49,8 @@ const FirstSectionContent: React.FC<FirstSectionContentProps> = ({ onLogout }) =
           <img
             src="/src/assets/images/light.svg"
             alt="Sigtrack Logo"
-            className="mb-6 absolute w-10 bottom-10"
-            onClick={() => openLink('https://client.meshtastic.org/')} // Replace with your desired link
+            className="mb-6 absolute w-10 bottom-10 "
+           
           />
         </div>
 

@@ -419,10 +419,10 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
       {!displayIconsOnly && <h2 className="font-bold">Active Teams</h2>}
       <ul>
         {activeTeams.map((team) => (
-          <li key={team.id} className="flex items-center mb-2 cursor-pointer space-y-2 ">
+          <li key={team.id} className="flex items-center mb-2 cursor-pointer space-y-2  ">
             {displayIconsOnly ? (
               <div
-                className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center space-y-10  `}
+                className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center mb-4 outline outline-offset-0 outline-gray-200`}
                 style={{
                   backgroundColor: team.color || 'brown',
                   color: 'white',
@@ -434,7 +434,7 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
             ) : (
               <>
                 <div
-                  className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center space-y-2`}
+                  className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center space-y-2 outline outline-offset-0 outline-gray-200`}
                   style={{
                     backgroundColor: team.color || 'brown',
                     color: 'white',
@@ -473,7 +473,7 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
           <li key={team.id} className="flex items-center mb-2 cursor-pointer  space-y-2">
             {displayIconsOnly ? (
               <div
-                className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center  `}
+                className={`rounded-md  w-8 h-8 mr-2 flex items-center justify-center mb-4 outline outline-offset-0 outline-gray-200 `}
                 style={{
                   backgroundColor: 'transparent', // Set background color to transparent
                   
@@ -485,7 +485,7 @@ const handleEditFormSubmit = async (updatedValues: Partial<Team>) => {
             ) : (
               <>
                 <div
-                  className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center`}
+                  className={`rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center outline outline-offset-0 outline-gray-200`}
                   style={{
                     backgroundColor: team.color || 'brown',
                     color: 'white',

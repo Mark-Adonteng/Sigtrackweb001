@@ -5,24 +5,24 @@ import { useTeamMembersContext } from '../Context/TeamMembersContext';
 import { getFirestore, doc, updateDoc, arrayRemove, collection } from 'firebase/firestore';
 import { useTeamId } from '../Context/TeamIdContext';
 import { Member } from './AddMembersButton';
-import db from '../services/Firestore';
+import {MemberData} from '../Context/TeamMembersContext'
 
 interface TeamMembersProps {
   formatDate: (date: string | Date) => string;
 }
 
-interface MemberData {
-  userId: string;
-  callSign: string;
-  name: string;
-  dateCreated: string | Date;
-  latitude: number;
-  longitude: number;
-  password: string;
-  status: string;
-  user_type: string;
-  organization?: string;
-}
+// interface MembersData {
+//   userId: string;
+//   callSign: string;
+//   name: string;
+//   dateCreated: string | Date;
+//   latitude: number;
+//   longitude: number;
+//   password: string;
+//   status: string;
+//   user_type: string;
+//   organization?: string;
+// }
 
 const TeamMembers: React.FC<TeamMembersProps> = ({ formatDate }) => {
   const { teamMembers, setTeamMembers } = useTeamMembersContext();
@@ -143,7 +143,7 @@ const handleEditFormSubmit = async (updatedValues: Partial<Member>) => {
           teamMembers.map((member, index) => (
             <li key={index} className="flex items-center mb-4">
               <div
-                className="bg-red-500 text-white rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center cursor-pointer"
+                className="bg-red-500 text-white rounded-md p-2 w-8 h-8 mr-2 flex items-center justify-center outline outline-offset-0 outline-gray-200 cursor-pointer"
                 onClick={() => handleMemberClick(member.name, member.dateCreated, member.userId)}
               >
                 {member.name.charAt(0)}
@@ -178,7 +178,7 @@ const handleEditFormSubmit = async (updatedValues: Partial<Member>) => {
 
       {/* Display form when showForm is true */}
           {showConfirmDeleteForm && (
-        <div className="fixed inset-0 bg-gray-900 text-black bg-opacity-50 flex justify-center items-center text-sm">
+        <div className=" fixed inset-0 bg-gray-900 text-black bg-opacity-50 flex justify-center items-center z-36 text-sm">
           <div className=' bg-gray-200 text-black w-96 text-center rounded-lg shadow-md p-6  text-sm'>
           <h2 className="text-lg font-semibold mb-2">Are you sure you want to delete {ConfirmDeleteformData?.name} </h2>
           <button onClick={handleConfirmDelete}

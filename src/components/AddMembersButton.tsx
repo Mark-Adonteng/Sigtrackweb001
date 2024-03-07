@@ -157,6 +157,7 @@ const AddMembersButton: React.FC<AddMembersProps> = ({ onAddMembersClick }) => {
                 className="input bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
               >
+                <option value="select">Select</option>
                 <option value="active">Active</option>
                 <option value="suspended">Suspended</option>
               </select>
@@ -168,6 +169,7 @@ const AddMembersButton: React.FC<AddMembersProps> = ({ onAddMembersClick }) => {
                 className="input bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
                 onChange={(e) => setFormData({ ...formData, user_type: e.target.value })}
               >
+                <option value="select">Select</option>
                 <option value="admin">Admin</option>
                 <option value="user">User</option>
               </select>

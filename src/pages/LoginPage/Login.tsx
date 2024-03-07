@@ -25,6 +25,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [organization, setOrganization] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false); // Added loading state
+  const [showLoginForm, setShowLoginForm] = useState(true);
 
   const { setEnteredOrganization } = useOrganizationContext();
 
@@ -58,9 +59,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               alert('Login successful!');
               return;
             } else if (userStatus.status === 'suspended') {
-              // Handle suspension more gracefully
-              // Redirecting to a different page or showing a modal would be better
-              alert('YOU ARE SUSPENDED');
+              // Show the suspended message
+              setShowLoginForm(false);
               return;
             }
           }
@@ -85,6 +85,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   
   return (
     <div className="flex items-center justify-center h-screen">
+      {showLoginForm ?
       
        
          <div
@@ -133,14 +134,17 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           <p className='font-bold text-sm mr-20'>Not registered, click here to register</p>
         </div>
       </div>
-      {/* <TeamNamesComponent organization={organization} /> */}
-
-    
-     
       
-    </div>
+     : (
+      <div className='text-center mb-2'>
+        <div className='text-2xl font-semibold'>You Are Suspended</div>
+        <p className='text-sm'> Please contact your Admin to rectify your user status</p>
+        </div>
+      
+    )}
+  </div>
      
   );
 };
 
-export default LoginPage;
+export default LoginPage; 

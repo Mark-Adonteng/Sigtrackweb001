@@ -1,11 +1,11 @@
-
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { useTeamMembersContext } from '../Context/TeamMembersContext';
 import { getDoc, doc } from 'firebase/firestore';
-import { exists } from 'firebase/firestore';
-import {db }from '../services/firebase';
+import { db } from '../services/firebase';
 import { MemberData } from '../Context/TeamMembersContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
 const containerStyle: React.CSSProperties = {
   position: 'absolute',
@@ -29,6 +29,7 @@ const GoogleMapComponent: React.FC = () => {
     { userId: string; position: { lat: number; lng: number }; memberData: MemberData }[]
   >([]);
   const [selectedMember, setSelectedMember] = useState<MemberData | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
     const fetchUserMarkers = async () => {
@@ -58,16 +59,40 @@ const GoogleMapComponent: React.FC = () => {
     };
 
     fetchUserMarkers();
+
+    // Fetch current location
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCurrentLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (error) => {
+        console.error('Error getting current location:', error);
+      }
+    );
   }, [teamMembers]);
 
   const handleMarkerClick = (member: MemberData) => {
     setSelectedMember(member);
   };
 
-  const center = {
+  const center = currentLocation || {
     lat: 5.5871,
     lng: -0.2774,
   };
+
+
+  const handleGoToCurrentLocation = () => {
+    if (currentLocation && mapRef.current) {
+      // Set the map center to the current location using the mapRef
+      mapRef.current.panTo(currentLocation);
+    }
+  };
+
+  const mapRef = React.useRef<google.maps.Map | null>(null);
+
   return (
     <LoadScript
       googleMapsApiKey="AIzaSyDkw3a_XLgmpbUFB1yuuNj3o5cFlhP7HCo"
@@ -88,7 +113,16 @@ const GoogleMapComponent: React.FC = () => {
           {/* ... (dropdown select options) */}
         </select>
       </div>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15} mapTypeId={mapType}>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={15}
+        mapTypeId={mapType}
+        onLoad={(map) => {
+          // Save the reference to the map
+          mapRef.current = map;
+        }}
+      >
         {userMarkers.map((marker) => (
           <Marker
             key={marker.userId}
@@ -96,6 +130,20 @@ const GoogleMapComponent: React.FC = () => {
             onClick={() => handleMarkerClick(marker.memberData)}
           />
         ))}
+
+{currentLocation && (
+          <Marker
+            position={currentLocation}
+            icon={{
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 10,
+              fillColor: 'green',
+              fillOpacity: 1,
+              strokeColor: '#ffffff',
+              strokeWeight: 2,
+            }}
+          />
+        )}
 
         {selectedMember && (
          <InfoWindow
@@ -113,13 +161,21 @@ const GoogleMapComponent: React.FC = () => {
              <strong>Status:</strong> {selectedMember.status}
            </div>
            <div>
-             <strong>User Type:</strong> {selectedMember.user_type}
+             <strong>User Type:</strong> {selectedMember.user_type} 
            </div>
            {/* Add other member details as needed */}
          </div>
        </InfoWindow>
        
         )}
+        <div className='bg-white'>
+        <div
+          onClick={handleGoToCurrentLocation}
+          className='fixed p-1 text-green left-96 ml-[1032px] mt-96 top-28 bg-white w-10 text-center pointer '
+        >
+          <FontAwesomeIcon icon={faMapMarkerAlt} size="2x" />
+        </div>
+        </div>
       </GoogleMap>
     </LoadScript>
   );

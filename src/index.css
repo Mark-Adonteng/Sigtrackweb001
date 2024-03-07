@@ -5,3 +5,38 @@
 body{
     overflow:hidden;
 }
+
+/* GoogleMapComponent.css */
+
+/* Styling for the map container */
+.google-map-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Add media queries for responsiveness */
+  @media screen and (min-width: 600px) {
+    /* Adjust the styling for larger screens if needed */
+    .google-map-container {
+      left: 5vw;
+      width: calc(120.5vw - 400px);
+    }
+  }
+  /* Add media queries for responsive positioning */
+@media screen and (min-width: 600px) {
+    .google-map-container .bg-white .absolute {
+      left: 5%;
+      margin-left: 5%;
+      margin-top: 5%;
+      top: 5%;
+    }
+  }
+  
+  /* ... (add more media queries as needed) */
+  
+  
+  /* ... (add more media queries as needed) */
+  

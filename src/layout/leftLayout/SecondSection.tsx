@@ -37,7 +37,7 @@ const SecondSection: React.FC<SecondSectionProps> = ({ children }) => {
     >
       <div className="content-wrapper">
         <button
-          className={`arrow-button1 ml-48 text-2xl mt-3 text-secondary-text transform transition-transform duration-100 ease-in-out absolute border-none z-20
+          className={`arrow-button1 ml-48 text-2xl mt-3 text-secondary-text transform transition-transform duration-100 ease-in-out absolute border-none
             shadow-none bg-transparent right-0.5  top-${isNarrowed1 ? '0' : '0'} ${rotation === 180 ? 'rotate-180' : ''} transition-transform duration-500 ease-in-out`}
           onClick={handleButtonClick}
         >
